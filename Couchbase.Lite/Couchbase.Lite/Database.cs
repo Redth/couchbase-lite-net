@@ -2181,11 +2181,11 @@ PRAGMA user_version = 3;";
 
                 ++transactionLevel;
 
-				Log.I(Database.TagSql, Thread.CurrentThread().Name + " Begin transaction (level " + transactionLevel + ")");
+                Log.I(Database.TagSql, Sharpen.Thread.CurrentThread().GetName() + " Begin transaction (level " + transactionLevel + ")");
             }
             catch (SQLException e)
             {
-				Log.E(Database.Tag, Thread.CurrentThread().Name + " Error calling beginTransaction()" , e);
+                Log.E(Database.Tag, Sharpen.Thread.CurrentThread().GetName() + " Error calling beginTransaction()" , e);
 
                 return false;
             }
@@ -2201,21 +2201,21 @@ PRAGMA user_version = 3;";
 
             if (commit)
             {
-				Log.I(Database.TagSql, Thread.CurrentThread().Name + " Committing transaction (level " + transactionLevel + ")");
+                Log.I(Database.TagSql, Thread.CurrentThread().GetName() + " Committing transaction (level " + transactionLevel + ")");
 
                 StorageEngine.SetTransactionSuccessful();
                 StorageEngine.EndTransaction();
             }
             else
             {
-				Log.I(TagSql, Thread.CurrentThread().Name + " CANCEL transaction (level " + transactionLevel + ")");
+                Log.I(TagSql, Thread.CurrentThread().GetName() + " CANCEL transaction (level " + transactionLevel + ")");
                 try
                 {
                     StorageEngine.EndTransaction();
                 }
                 catch (SQLException e)
                 {
-					Log.E(Database.Tag, Thread.CurrentThread().Name + " Error calling endTransaction()", e);
+                    Log.E(Database.Tag, Thread.CurrentThread().GetName() + " Error calling endTransaction()", e);
 
                     return false;
                 }

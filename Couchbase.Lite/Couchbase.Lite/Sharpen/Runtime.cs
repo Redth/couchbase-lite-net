@@ -122,27 +122,28 @@ namespace Sharpen
 //			return Dns.GetHostEntry (Dns.GetHostName ()).AddressList[0];
 //		}
 		
-//		static Hashtable properties;
-//
-//        public static Hashtable Properties { get { return GetProperties(); } }
-//		
-//		public static Hashtable GetProperties ()
-//		{
-//			if (properties == null) {
-//				properties = new Hashtable ();
-//				properties ["jgit.fs.debug"] = "false";
-//				var home = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile).Trim ();
-//				if (string.IsNullOrEmpty (home))
-//					home = Environment.GetFolderPath (Environment.SpecialFolder.Personal).Trim ();
-//				properties ["user.home"] = home;
-//				properties ["java.library.path"] = Environment.GetEnvironmentVariable ("PATH");
-//				if (Path.DirectorySeparatorChar != '\\')
-//					properties ["os.name"] = "Unix";
-//				else
-//					properties ["os.name"] = "Windows";
-//			}
-//			return properties;
-//		}
+        #if !PORTABLE
+		static Hashtable properties;
+
+        public static Hashtable Properties { get { return GetProperties(); } }
+		
+		public static Hashtable GetProperties ()
+		{
+			if (properties == null) {
+				properties = new Hashtable ();
+				properties ["jgit.fs.debug"] = "false";
+				var home = Environment.GetFolderPath (Environment.SpecialFolder.UserProfile).Trim ();
+				if (string.IsNullOrEmpty (home))
+					home = Environment.GetFolderPath (Environment.SpecialFolder.Personal).Trim ();
+				properties ["user.home"] = home;
+				properties ["java.library.path"] = Environment.GetEnvironmentVariable ("PATH");
+				if (Path.DirectorySeparatorChar != '\\')
+					properties ["os.name"] = "Unix";
+				else
+					properties ["os.name"] = "Windows";
+			}
+			return properties;
+		}
 
 		public static string GetProperty (string key)
 		{
@@ -153,6 +154,7 @@ namespace Sharpen
 		{
 			GetProperties () [key] = value;
 		}
+        #endif
 
 		public static Runtime GetRuntime ()
 		{

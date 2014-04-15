@@ -74,7 +74,6 @@
     <Compile Include="Sharpen\Channels.cs" />
     <Compile Include="Sharpen\CharBuffer.cs" />
     <Compile Include="Sharpen\CharSequence.cs" />
-    <Compile Include="Sharpen\CharsetDecoder.cs" />
     <Compile Include="Sharpen\CharsetEncoder.cs" />
     <Compile Include="Sharpen\CodingErrorAction.cs" />
     <Compile Include="Sharpen\Collections.cs" />

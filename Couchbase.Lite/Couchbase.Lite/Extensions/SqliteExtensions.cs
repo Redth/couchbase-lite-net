@@ -106,20 +106,8 @@ namespace Couchbase.Lite
             return newSql.ToString();
         }
 			
-		#if !PORTABLE
-        public static SqliteParameter[] ToSqliteParameters(this Object[] args)
-        {
-			var paramArgs = new SqliteParameter[args.LongLength];
-            for(var i = 0L; i < args.LongLength; i++)
-            {
-                var a = args[i];
-                paramArgs[i] = new SqliteParameter(a.GetType().ToDbType(), a) { ParameterName = "@" + i };
-            }
-            return paramArgs;
-        }
-        #endif
-
-		public static Type ToDbType(this Type type)
+		#if PORTABLE
+        public static Type ToDbType(this Type type)
         {
             Type dbType;
             var success = TypeMap.TryGetValue(type, out dbType);
@@ -131,6 +119,31 @@ namespace Couchbase.Lite
             }
             return dbType;
         }
+        #else
+        public static SqliteParameter[] ToSqliteParameters(this Object[] args)
+        {
+			var paramArgs = new SqliteParameter[args.LongLength];
+            for(var i = 0L; i < args.LongLength; i++)
+            {
+                var a = args[i];
+                paramArgs[i] = new SqliteParameter(a.GetType().ToDbType(), a) { ParameterName = "@" + i };
+            }
+            return paramArgs;
+        }
+
+        public static DbType ToDbType(this Type type)
+        {
+            DbType dbType;
+            var success = TypeMap.TryGetValue(type, out dbType);
+            if (!success)
+            {
+                var message = "Failed to determine database type for query param of type {0}".Fmt(type.Name);
+                Log.E("SqliteExtensions", message);
+                throw new ArgumentException(message, "type");
+            }
+            return dbType;
+        }
+        #endif
     }
 }
 
