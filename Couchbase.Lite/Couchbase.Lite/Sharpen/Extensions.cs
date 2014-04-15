@@ -704,17 +704,17 @@ namespace Sharpen
 			return "";
 		}
 		
-		public static string GetHostAddress (this IPAddress addr)
-		{
-			return addr.ToString ();
-		}
-		
-		public static IPAddress GetAddressByName (string name)
-		{
-			if (name == "0.0.0.0")
-				return IPAddress.Any;
-			return Dns.GetHostAddresses (name).FirstOrDefault ();
-		}
+//		public static string GetHostAddress (this IPAddress addr)
+//		{
+//			return addr.ToString ();
+//		}
+//		
+//		public static IPAddress GetAddressByName (string name)
+//		{
+//			if (name == "0.0.0.0")
+//				return IPAddress.Any;
+//			return Dns.GetHostAddresses (name).FirstOrDefault ();
+//		}
 		
 		public static string GetImplementationVersion (this System.Reflection.Assembly asm)
 		{
@@ -751,100 +751,100 @@ namespace Sharpen
 			return uri;
 		}
 		
-		public static InputStream GetInputStream (this Socket socket)
-		{
-			return new System.Net.Sockets.NetworkStream (socket);
-		}
-		
-		public static OutputStream GetOutputStream (this Socket socket)
-		{
-			return new System.Net.Sockets.NetworkStream (socket);
-		}
-		
-		public static int GetLocalPort (this Socket socket)
-		{
-			return ((IPEndPoint)socket.LocalEndPoint).Port;
-		}
-		
-		public static int GetPort (this Socket socket)
-		{
-			return ((IPEndPoint)socket.RemoteEndPoint).Port;
-		}
-		
-		public static IPAddress GetInetAddress (this Socket socket)
-		{
-			return ((IPEndPoint)socket.RemoteEndPoint).Address;
-		}
-		
-		public static void Bind2 (this Socket socket, EndPoint ep)
-		{
-			if (ep == null)
-				socket.Bind (new IPEndPoint (IPAddress.Any, 0));
-			else
-				socket.Bind (ep);
-		}
-		
-		
-		public static void Connect (this Socket socket, EndPoint ep, int timeout)
-		{
-			try {
-				IAsyncResult res = socket.BeginConnect (ep,null, null);
-				if (!res.AsyncWaitHandle.WaitOne (timeout > 0 ? timeout : Timeout.Infinite, true))
-					throw new IOException ("Connection timeout");
-			} catch (SocketException se) {
-				throw new IOException (se.Message);
-			}
-		}
-		
-		public static Socket CreateServerSocket (int port, int backlog, IPAddress addr)
-		{
-			Socket s = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			s.Bind (new IPEndPoint (addr, port));
-			return s;
-		}
-		
-		public static Socket CreateSocket (string host, int port)
-		{
-			Socket s = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			s.Connect (host, port);
-			return s;
-		}
-		
-		public static Socket CreateSocket ()
-		{
-			return new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-		}
-		
-		public static bool RemoveElement (this ArrayList list, object elem)
-		{
-			int i = list.IndexOf (elem);
-			if (i == -1)
-				return false;
-			else {
-				list.RemoveAt (i);
-				return true;
-			}
-		}
+//		public static InputStream GetInputStream (this Socket socket)
+//		{
+//			return new System.Net.Sockets.NetworkStream (socket);
+//		}
+//		
+//		public static OutputStream GetOutputStream (this Socket socket)
+//		{
+//			return new System.Net.Sockets.NetworkStream (socket);
+//		}
+//		
+//		public static int GetLocalPort (this Socket socket)
+//		{
+//			return ((IPEndPoint)socket.LocalEndPoint).Port;
+//		}
+//		
+//		public static int GetPort (this Socket socket)
+//		{
+//			return ((IPEndPoint)socket.RemoteEndPoint).Port;
+//		}
+//		
+//		public static IPAddress GetInetAddress (this Socket socket)
+//		{
+//			return ((IPEndPoint)socket.RemoteEndPoint).Address;
+//		}
+//		
+//		public static void Bind2 (this Socket socket, EndPoint ep)
+//		{
+//			if (ep == null)
+//				socket.Bind (new IPEndPoint (IPAddress.Any, 0));
+//			else
+//				socket.Bind (ep);
+//		}
+//		
+//		
+//		public static void Connect (this Socket socket, EndPoint ep, int timeout)
+//		{
+//			try {
+//				IAsyncResult res = socket.BeginConnect (ep,null, null);
+//				if (!res.AsyncWaitHandle.WaitOne (timeout > 0 ? timeout : Timeout.Infinite, true))
+//					throw new IOException ("Connection timeout");
+//			} catch (SocketException se) {
+//				throw new IOException (se.Message);
+//			}
+//		}
+//		
+//		public static Socket CreateServerSocket (int port, int backlog, IPAddress addr)
+//		{
+//			Socket s = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+//			s.Bind (new IPEndPoint (addr, port));
+//			return s;
+//		}
+//		
+//		public static Socket CreateSocket (string host, int port)
+//		{
+//			Socket s = new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+//			s.Connect (host, port);
+//			return s;
+//		}
+//		
+//		public static Socket CreateSocket ()
+//		{
+//			return new Socket (AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+//		}
+//		
+//		public static bool RemoveElement (this ArrayList list, object elem)
+//		{
+//			int i = list.IndexOf (elem);
+//			if (i == -1)
+//				return false;
+//			else {
+//				list.RemoveAt (i);
+//				return true;
+//			}
+//		}
 		
 		public static System.Threading.Semaphore CreateSemaphore (int count)
 		{
 			return new System.Threading.Semaphore (count, int.MaxValue);
 		}
 		
-		public static void SetCommand (this ProcessStartInfo si, IList<string> args)
-		{
-			si.FileName = args[0];
-			si.Arguments = string.Join (" ", args.Skip (1).Select (a => "\"" + a + "\"").ToArray ());
-		}
-		
-		public static SystemProcess Start (this ProcessStartInfo si)
-		{
-			si.UseShellExecute = false;
-			si.RedirectStandardInput = true;
-			si.RedirectStandardError = true;
-			si.RedirectStandardOutput = true;
-			si.CreateNoWindow = true;
-			return SystemProcess.Start (si);
-		}
+//		public static void SetCommand (this ProcessStartInfo si, IList<string> args)
+//		{
+//			si.FileName = args[0];
+//			si.Arguments = string.Join (" ", args.Skip (1).Select (a => "\"" + a + "\"").ToArray ());
+//		}
+//		
+//		public static SystemProcess Start (this ProcessStartInfo si)
+//		{
+//			si.UseShellExecute = false;
+//			si.RedirectStandardInput = true;
+//			si.RedirectStandardError = true;
+//			si.RedirectStandardOutput = true;
+//			si.CreateNoWindow = true;
+//			return SystemProcess.Start (si);
+//		}
 	}
 }

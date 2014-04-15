@@ -210,15 +210,14 @@ namespace Couchbase.Lite
             var newProps = new Dictionary<String, Object>();
             newProps.PutAll(userProperties);
 
-            foreach (string key in Properties.Keys)
-                {
-                    if (key.StartsWith("_", StringComparison.InvariantCultureIgnoreCase))
-                    {
+			foreach (string key in Properties.Keys) {
+				if (key.StartsWith("_", StringCompare.IgnoreCase)) {
                         newProps.Put(key, properties.Get(key));
-                    }
                 }
-                // Preserve metadata properties
-                properties = newProps;
+            }
+            
+			// Preserve metadata properties
+            properties = newProps;
         }
 
         /// <summary>

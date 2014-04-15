@@ -46,7 +46,9 @@ using Couchbase.Lite.Storage;
 using Sharpen;
 using System.Collections.Generic;
 using System;
+#if !PORTABLE
 using System.Data;
+#endif
 
 namespace Couchbase.Lite.Storage
 {

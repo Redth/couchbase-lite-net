@@ -73,9 +73,11 @@ namespace Sharpen
 			}
 		}
 
+		#if !PORTABLE
 		public FileChannel GetChannel ()
 		{
 			return new FileChannel ((FileStream)base.Wrapped);
 		}
+		#endif
 	}
 }

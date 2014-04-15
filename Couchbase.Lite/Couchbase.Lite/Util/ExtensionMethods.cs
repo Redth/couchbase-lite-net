@@ -61,10 +61,17 @@ namespace Couchbase.Lite
             }
         }
 
+		#if PORTABLE
+		public static String Fmt(this String str, params object[] vals)
+		{
+			return String.Format(str, vals);
+		}
+		#else
         public static String Fmt(this String str, params IConvertible[] vals)
         {
             return String.Format(str, vals);
         }
+		#endif
 
         public static Byte[] ReadAllBytes(this Stream stream)
         {

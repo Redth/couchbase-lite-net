@@ -226,7 +226,7 @@ namespace Couchbase.Lite {
                         // Reconstitute the document as a dictionary:
                         sequence = cursor.GetLong(1);
                         string docId = cursor.GetString(2);
-                        if (docId.StartsWith("_design/", StringComparison.InvariantCultureIgnoreCase))
+						if (docId.StartsWith("_design/", StringCompare.IgnoreCase))
                         {
                             // design docs don't get indexed!
                             cursor.MoveToNext();

@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{751921E0-F
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Couchbase.Lite.Portable", "Couchbase.Lite.Portable\Couchbase.Lite.Portable.csproj", "{4549DF94-D72A-48D0-A4DD-8D8759C70EE7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x86 = Debug|x86
@@ -20,6 +22,10 @@ Global
 		{18AE9E93-AF27-47A0-921C-1846941643B6}.Debug|x86.Build.0 = Debug|x86
 		{18AE9E93-AF27-47A0-921C-1846941643B6}.Release|x86.ActiveCfg = Release|x86
 		{18AE9E93-AF27-47A0-921C-1846941643B6}.Release|x86.Build.0 = Release|x86
+		{4549DF94-D72A-48D0-A4DD-8D8759C70EE7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4549DF94-D72A-48D0-A4DD-8D8759C70EE7}.Debug|x86.Build.0 = Debug|Any CPU
+		{4549DF94-D72A-48D0-A4DD-8D8759C70EE7}.Release|x86.ActiveCfg = Release|Any CPU
+		{4549DF94-D72A-48D0-A4DD-8D8759C70EE7}.Release|x86.Build.0 = Release|Any CPU
 		{810AD241-3FB1-4689-BF3B-A83B90DEB9E9}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{810AD241-3FB1-4689-BF3B-A83B90DEB9E9}.Debug|x86.Build.0 = Debug|Any CPU
 		{810AD241-3FB1-4689-BF3B-A83B90DEB9E9}.Release|x86.ActiveCfg = Release|Any CPU
@@ -28,6 +34,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Couchbase.Lite.Tests\Couchbase.Lite.Tests.csproj
+		StartupItem = Couchbase.Lite\Couchbase.Lite.csproj
 	EndGlobalSection
 EndGlobal

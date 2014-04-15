@@ -80,6 +80,7 @@ namespace Couchbase.Lite.Util
             sourceFile.CopyTo(destFile.FullName);
 		}
 
+		#if !PORTABLE
 		/// <exception cref="System.IO.IOException"></exception>
         public static void CopyFolder(FileSystemInfo sourcePath, FileSystemInfo destinationPath)
 		{
@@ -108,5 +109,6 @@ namespace Couchbase.Lite.Util
                 CopyFile((FileInfo)sourcePath, (FileInfo)destinationPath);
 			}
 		}
+		#endif
 	}
 }

@@ -100,7 +100,7 @@ namespace Couchbase.Lite.Support
 
 		public void SetContentType(String contentType)
 		{
-            if (!contentType.StartsWith ("multipart/", StringComparison.InvariantCultureIgnoreCase))
+			if (!contentType.StartsWith ("multipart/", StringCompare.IgnoreCase))
 			{
 				throw new ArgumentException("contentType must start with multipart/");
 			}

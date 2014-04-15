@@ -52,5 +52,17 @@ namespace Sharpen {
             return String.Compare(a, b, true, CultureInfo.InvariantCulture);
         }
     }
+
+	public static class StringCompare {
+		public static StringComparison IgnoreCase {
+			get {
+				#if PORTABLE
+				return StringComparison.CurrentCultureIgnoreCase;
+				#else
+				return StringComparison.InvariantCultureIgnoreCase;
+				#endif
+			}
+		}
+	}
 }
 

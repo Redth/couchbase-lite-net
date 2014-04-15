@@ -302,7 +302,7 @@ namespace Couchbase.Lite.Support
 				string param = token.Trim();
 				if (first)
 				{
-                    if (!param.StartsWith("multipart/", StringComparison.InvariantCultureIgnoreCase))
+					if (!param.StartsWith("multipart/", StringCompare.IgnoreCase))
 					{
 						throw new ArgumentException(contentType + " does not start with multipart/");
 					}
@@ -310,12 +310,12 @@ namespace Couchbase.Lite.Support
 				}
 				else
 				{
-                    if (param.StartsWith("boundary=", StringComparison.InvariantCultureIgnoreCase))
+					if (param.StartsWith("boundary=", StringCompare.IgnoreCase))
 					{
                         var tempBoundary = param.Substring(9);
-                        if (tempBoundary.StartsWith ("\"", StringComparison.InvariantCultureIgnoreCase)) 
+						if (tempBoundary.StartsWith ("\"", StringCompare.IgnoreCase)) 
                         {
-                            if (tempBoundary.Length < 2 || !tempBoundary.EndsWith ("\"", StringComparison.InvariantCultureIgnoreCase)) {
+							if (tempBoundary.Length < 2 || !tempBoundary.EndsWith ("\"", StringCompare.IgnoreCase)) {
                                 throw new ArgumentException (contentType + " is not valid");
                             }
                             tempBoundary = tempBoundary.Substring(1, tempBoundary.Length - 1);

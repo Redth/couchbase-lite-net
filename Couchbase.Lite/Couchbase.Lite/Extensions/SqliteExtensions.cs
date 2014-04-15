@@ -42,22 +42,28 @@
 * and limitations under the License.
 */
 using System;
+#if !PORTABLE
 using Mono.Data.Sqlite;
-using System.Linq;
+using Mono.Security.X509;
 using System.Data;
+#endif
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using Couchbase.Lite.Util;
-using Mono.Security.X509;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
+using Couchbase.Lite.Util;
 
 namespace Couchbase.Lite
 {
     public static class SqliteExtensions
     {
+        #if PORTABLE
+        static readonly IDictionary<Type, Type> TypeMap;
+        #else
         static readonly IDictionary<Type, DbType> TypeMap;
+        #endif
 
         static readonly Regex paramPattern;
 
@@ -65,14 +71,23 @@ namespace Couchbase.Lite
         {
             paramPattern = new Regex("@\\w?");
 
-            TypeMap = new Dictionary<Type, DbType>
-            {
+            #if PORTABLE
+            TypeMap = new Dictionary<Type, Type> {              
+				{ typeof(String), typeof(string) },
+				{ typeof(Int32), typeof(Int32) },
+				{ typeof(Int64), typeof(Int64) },
+				{ typeof(byte[]), typeof(byte[]) },
+				{ typeof(Boolean), typeof(Boolean) },               
+            };
+            #else
+            TypeMap = new Dictionary<Type, DbType> {
                 { typeof(String), DbType.String },
                 { typeof(Int32), DbType.Int32 },
                 { typeof(Int64), DbType.Int64 },
                 { typeof(byte[]), DbType.Binary },
                 { typeof(Boolean), DbType.Boolean },
             };
+            #endif
         }
 
         public static String ReplacePositionalParams(this String sql)
@@ -90,10 +105,11 @@ namespace Couchbase.Lite
             }
             return newSql.ToString();
         }
-
+			
+		#if !PORTABLE
         public static SqliteParameter[] ToSqliteParameters(this Object[] args)
         {
-            var paramArgs = new SqliteParameter[args.LongLength];
+			var paramArgs = new SqliteParameter[args.LongLength];
             for(var i = 0L; i < args.LongLength; i++)
             {
                 var a = args[i];
@@ -101,10 +117,11 @@ namespace Couchbase.Lite
             }
             return paramArgs;
         }
+        #endif
 
-        public static DbType ToDbType(this Type type)
+		public static Type ToDbType(this Type type)
         {
-            DbType dbType;
+            Type dbType;
             var success = TypeMap.TryGetValue(type, out dbType);
             if (!success)
             {

@@ -60,9 +60,11 @@ namespace Sharpen
 			base.Wrapped = new FileStream (file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
 		}
 
+		#if !PORTABLE
 		public FileChannel GetChannel ()
 		{
 			return new FileChannel ((FileStream)base.Wrapped);
 		}
+		#endif
 	}
 }

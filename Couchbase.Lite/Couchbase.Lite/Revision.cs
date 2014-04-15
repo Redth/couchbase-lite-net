@@ -124,7 +124,7 @@ namespace Couchbase.Lite
                 var result = new Dictionary<String, Object>();
                 foreach (string key in Properties.Keys)
                 {
-                    if (!key.StartsWith("_", StringComparison.InvariantCultureIgnoreCase))
+					if (!key.StartsWith("_", StringCompare.IgnoreCase))
                     {
                         result.Put(key, Properties.Get(key));
                     }

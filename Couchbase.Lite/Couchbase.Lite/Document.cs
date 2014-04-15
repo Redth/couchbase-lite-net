@@ -326,7 +326,7 @@ namespace Couchbase.Lite {
             {
                 newId = (string)properties.Get("_id");
             }
-            if (newId != null && !newId.Equals(Id, StringComparison.InvariantCultureIgnoreCase))
+			if (newId != null && !newId.Equals(Id, StringCompare.IgnoreCase))
             {
                 Log.W(Database.Tag, String.Format("Trying to put wrong _id to this: {0} properties: {1}", this, properties)); // TODO: Make sure all string formats use .NET codes, and not Java.
             }

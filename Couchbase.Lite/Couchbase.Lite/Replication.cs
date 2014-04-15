@@ -44,7 +44,9 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
+#if !PORTABLE
 using System.Web;
+#endif
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.IO;
@@ -674,7 +676,7 @@ namespace Couchbase.Lite
             //     http://dotcom/db/ + /relpart == http://dotcom/db/relpart
             // which is not compatible with the way the java url concatonation works.
             var remoteUrlString = RemoteUrl.ToString();
-            if (remoteUrlString.EndsWith ("/", StringComparison.InvariantCultureIgnoreCase) && relativePath.StartsWith ("/", StringComparison.InvariantCultureIgnoreCase))
+			if (remoteUrlString.EndsWith ("/", StringCompare.IgnoreCase) && relativePath.StartsWith ("/", StringCompare.IgnoreCase))
             {
                 remoteUrlString = remoteUrlString.Substring(0, remoteUrlString.Length - 1);
             }

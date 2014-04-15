@@ -47,6 +47,24 @@ namespace Sharpen
 	using System.Threading;
 	using System.Collections.Generic;
 
+    #if PORTABLE
+    internal class Thread
+    {
+        public string Name { 
+            get { 
+                return "Unknown";
+            }
+        }
+
+        public string GetName() { return Name; }
+
+		static Thread current = new Thread();
+		public static Thread CurrentThread() 
+		{
+			return current; 
+		}
+    }
+    #else
 	internal class Thread : Runnable
 	{
 		private static ThreadGroup defaultGroup = new ThreadGroup ();
@@ -232,4 +250,5 @@ namespace Sharpen
 			}
 		}
 	}
+    #endif
 }

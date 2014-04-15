@@ -259,7 +259,7 @@ namespace Couchbase.Lite.Internal
 		public static int GenerationFromRevID(string revID)
 		{
 			var generation = 0;
-            var dashPos = revID.IndexOf("-", StringComparison.InvariantCultureIgnoreCase);
+			var dashPos = revID.IndexOf("-", StringCompare.IgnoreCase);
 			if (dashPos > 0)
 			{
                 generation = Convert.ToInt32(revID.Substring(0, dashPos));

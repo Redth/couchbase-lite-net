@@ -45,8 +45,11 @@ using System;
 
 namespace Couchbase.Lite {
 
-    public class CouchbaseLiteException : ApplicationException {
-
+	#if PORTABLE
+    public class CouchbaseLiteException : Exception {
+	#else
+	public class CouchbaseLiteException : ApplicationException {
+	#endif
         internal StatusCode Code { get; set; }
 
         public CouchbaseLiteException (Exception innerException, StatusCode code) : base(String.Format("Database error: {0}", code), innerException) { Code = code; }

@@ -55,6 +55,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Collections.ObjectModel;
 using Couchbase.Lite.Replicator;
+#if PORTABLE
+using PCLStorage.Exceptions;
+#endif
 
 namespace Couchbase.Lite
 {
@@ -116,7 +119,11 @@ namespace Couchbase.Lite
             legalCharactersPattern = new Regex("^[abcdefghijklmnopqrstuvwxyz0123456789_$()+-/]+$");
             mapper = new ObjectWriter();
             DefaultOptions = ManagerOptions.Default;
+			#if PORTABLE
+			defaultDirectory = new DirectoryInfo(PCLStorage.FileSystem.Current.LocalStorage.Path);
+			#else
             defaultDirectory = new DirectoryInfo(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+			#endif
             sharedManager = new Manager(defaultDirectory, ManagerOptions.Default);
         }
 
@@ -259,15 +266,20 @@ namespace Couchbase.Lite
                 var destFile = new FileInfo (database.Path);
                 
                 //FileDirUtils.CopyFile(sourceFile, destFile);
-                File.Copy (sourceFile.FullName, destFile.FullName);
+				var fileInfo = new FileInfo(sourceFile.FullName);
+				fileInfo.CopyTo(destFile.FullName);
+				//File.Copy (sourceFile.FullName, destFile.FullName);
                 
                 var dstAttachmentsDirectory = new DirectoryInfo (dstAttachmentsPath);
                 //FileDirUtils.DeleteRecursive(attachmentsFile);
-                System.IO.Directory.Delete (dstAttachmentsPath, true);
+
+				var dirInfo = new DirectoryInfo(dstAttachmentsPath);
+				dirInfo.Delete(true);
                 dstAttachmentsDirectory.Create ();
                 
                 if (attachmentsDirectory != null) {
-                    System.IO.Directory.Move (attachmentsDirectory.FullName, dstAttachmentsDirectory.FullName);
+					attachmentsDirectory.MoveTo(dstAttachmentsDirectory.FullName);
+					//System.IO.Directory.Move (attachmentsDirectory.FullName, dstAttachmentsDirectory.FullName);
                 }
 
                 database.ReplaceUUIDs ();

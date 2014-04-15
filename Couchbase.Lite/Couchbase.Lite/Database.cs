@@ -54,7 +54,9 @@ using Couchbase.Lite.Internal;
 using System.Threading.Tasks;
 using System.Text;
 using System.Diagnostics;
+#if !PORTABLE
 using System.Data;
+#endif
 using Couchbase.Lite.Replicator;
 using Couchbase.Lite.Support;
 using Newtonsoft.Json.Linq;
@@ -70,7 +72,11 @@ namespace Couchbase.Lite
         /// <summary>Constructor</summary>
         internal Database(String path, Manager manager)
         {
-            Debug.Assert((path.StartsWith("/", StringComparison.InvariantCultureIgnoreCase)));
+			#if PORTABLE
+			Debug.Assert((path.StartsWith("/", StringComparison.CurrentCultureIgnoreCase)));
+			#else
+			Debug.Assert((path.StartsWith("/", StringComparison.InvariantCultureIgnoreCase)));
+			#endif
 
             //path must be absolute
             Path = path;
@@ -293,7 +299,9 @@ namespace Couchbase.Lite
             //recursively delete attachments path
             var deletedAttachmentsPath = true;
             try {
-                Directory.Delete (attachmentsFile.GetPath (), true);
+				var dirInfo = new DirectoryInfo(attachmentsFile.GetPath());
+				dirInfo.Delete(true);
+				//Directory.Delete (attachmentsFile.GetPath (), true);
             } catch (Exception ex) {
                 Log.V(Database.Tag, "Error deleting the attachments directory.", ex);
                 deletedAttachmentsPath = false;
@@ -884,7 +892,7 @@ PRAGMA user_version = 3;";
         private RevisionInternal PutLocalRevision(RevisionInternal revision, string prevRevID)
         {
             var docID = revision.GetDocId();
-            if (!docID.StartsWith ("_local/", StringComparison.InvariantCultureIgnoreCase))
+			if (!docID.StartsWith ("_local/", StringCompare.IgnoreCase))
             {
                 throw new CouchbaseLiteException(StatusCode.BadRequest);
             }
@@ -2173,11 +2181,11 @@ PRAGMA user_version = 3;";
 
                 ++transactionLevel;
 
-                Log.I(Database.TagSql, System.Threading.Thread.CurrentThread.Name + " Begin transaction (level " + transactionLevel + ")");
+				Log.I(Database.TagSql, Thread.CurrentThread().Name + " Begin transaction (level " + transactionLevel + ")");
             }
             catch (SQLException e)
             {
-                Log.E(Database.Tag,System.Threading.Thread.CurrentThread.Name + " Error calling beginTransaction()" , e);
+				Log.E(Database.Tag, Thread.CurrentThread().Name + " Error calling beginTransaction()" , e);
 
                 return false;
             }
@@ -2193,21 +2201,21 @@ PRAGMA user_version = 3;";
 
             if (commit)
             {
-                Log.I(Database.TagSql,System.Threading.Thread.CurrentThread.Name + " Committing transaction (level " + transactionLevel + ")");
+				Log.I(Database.TagSql, Thread.CurrentThread().Name + " Committing transaction (level " + transactionLevel + ")");
 
                 StorageEngine.SetTransactionSuccessful();
                 StorageEngine.EndTransaction();
             }
             else
             {
-                Log.I(TagSql,System.Threading.Thread.CurrentThread.Name + " CANCEL transaction (level " + transactionLevel + ")");
+				Log.I(TagSql, Thread.CurrentThread().Name + " CANCEL transaction (level " + transactionLevel + ")");
                 try
                 {
                     StorageEngine.EndTransaction();
                 }
                 catch (SQLException e)
                 {
-                    Log.E(Database.Tag,System.Threading.Thread.CurrentThread.Name + " Error calling endTransaction()", e);
+					Log.E(Database.Tag, Thread.CurrentThread().Name + " Error calling endTransaction()", e);
 
                     return false;
                 }
@@ -2691,7 +2699,7 @@ PRAGMA user_version = 3;";
         private static int ParseRevIDNumber(string rev)
         {
             var result = -1;
-            var dashPos = rev.IndexOf("-", StringComparison.InvariantCultureIgnoreCase);
+			var dashPos = rev.IndexOf("-", StringCompare.IgnoreCase);
 
             if (dashPos >= 0)
             {
@@ -2711,7 +2719,7 @@ PRAGMA user_version = 3;";
         private static string ParseRevIDSuffix(string rev)
         {
             var result = String.Empty;
-            int dashPos = rev.IndexOf("-", StringComparison.InvariantCultureIgnoreCase);
+			int dashPos = rev.IndexOf("-", StringCompare.IgnoreCase);
             if (dashPos >= 0)
             {
                 result = Runtime.Substring(rev, dashPos + 1);
@@ -3486,7 +3494,7 @@ PRAGMA user_version = 3;";
             var properties = new Dictionary<String, Object>(origProps.Count);
             foreach (var key in origProps.Keys)
             {
-                if (key.StartsWith("_", StringComparison.InvariantCultureIgnoreCase))
+				if (key.StartsWith("_", StringCompare.IgnoreCase))
                 {
                     if (!KnownSpecialKeys.Contains(key))
                     {
@@ -3746,7 +3754,7 @@ PRAGMA user_version = 3;";
                 return false;
             }
 
-            return id [0] != '_' || id.StartsWith ("_design/", StringComparison.InvariantCultureIgnoreCase);
+			return id [0] != '_' || id.StartsWith ("_design/", StringCompare.IgnoreCase);
         }
 
         /// <summary>VALIDATION</summary>
@@ -3791,7 +3799,7 @@ PRAGMA user_version = 3;";
         internal String AttachmentStorePath {
             get {
                 var attachmentStorePath = Path;
-                int lastDotPosition = attachmentStorePath.LastIndexOf(".", StringComparison.InvariantCultureIgnoreCase);
+				int lastDotPosition = attachmentStorePath.LastIndexOf(".", StringCompare.IgnoreCase);
                 if (lastDotPosition > 0)
                 {
                     attachmentStorePath = Runtime.Substring(attachmentStorePath, 0, lastDotPosition);
