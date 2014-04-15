@@ -44,13 +44,13 @@
 using System.Reflection;
 using System.Net;
 using System.Linq;
-using System.Net.Sockets;
+//using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Specialized;
 
 namespace Sharpen
 {
-	using ICSharpCode.SharpZipLib.Zip.Compression;
+    //using ICSharpCode.SharpZipLib.Zip.Compression;
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
@@ -169,20 +169,20 @@ namespace Sharpen
 			}
 		}
 		
-		public static string Decode (this Encoding e, ByteBuffer buffer)
-		{
-			return e.Decode (buffer.Array (), buffer.ArrayOffset () + buffer.Position (), buffer.Limit () - buffer.Position ());
-		}
-
-		public static ByteBuffer Encode (this Encoding e, CharSequence str)
-		{
-			return ByteBuffer.Wrap (e.GetBytes (str.ToString ()));
-		}
-
-		public static ByteBuffer Encode (this Encoding e, string str)
-		{
-			return ByteBuffer.Wrap (e.GetBytes (str));
-		}
+//		public static string Decode (this Encoding e, ByteBuffer buffer)
+//		{
+//			return e.Decode (buffer.Array (), buffer.ArrayOffset () + buffer.Position (), buffer.Limit () - buffer.Position ());
+//		}
+//
+//		public static ByteBuffer Encode (this Encoding e, CharSequence str)
+//		{
+//			return ByteBuffer.Wrap (e.GetBytes (str.ToString ()));
+//		}
+//
+//		public static ByteBuffer Encode (this Encoding e, string str)
+//		{
+//			return ByteBuffer.Wrap (e.GetBytes (str));
+//		}
 		
 		static UTF8Encoding UTF8Encoder = new UTF8Encoding (false, true);
 		public static Encoding GetEncoding (string name)
@@ -203,9 +203,9 @@ namespace Sharpen
 			return s;
 		}
 
-		public static void Finish (this Inflater i)
-		{
-		}
+//		public static void Finish (this Inflater i)
+//		{
+//		}
 		
 //		public static bool AddItem<T> (this IList<T> list, T item)
 //		{
@@ -240,19 +240,19 @@ namespace Sharpen
 				d[val.Key] = val.Value;
 		}
 
-		public static object Put (this Hashtable d, object key, object value)
-		{
-			object old = d [key];
-			d[key] = value;
-			return old;
-		}
-
-		public static string Put (this StringDictionary d, string key, string value)
-		{
-			string old = d [key];
-			d[key] = value;
-			return old;
-		}
+//		public static object Put (this Hashtable d, object key, object value)
+//		{
+//			object old = d [key];
+//			d[key] = value;
+//			return old;
+//		}
+//
+//		public static string Put (this StringDictionary d, string key, string value)
+//		{
+//			string old = d [key];
+//			d[key] = value;
+//			return old;
+//		}
 
 		public static CultureInfo GetEnglishCulture ()
 		{
@@ -414,15 +414,15 @@ namespace Sharpen
 			return new DateTimeOffset (num + offset.Ticks, offset);
 		}
 
-		public static CharsetDecoder NewDecoder (this Encoding enc)
-		{
-			return new CharsetDecoder (enc);
-		}
-
-		public static CharsetEncoder NewEncoder (this Encoding enc)
-		{
-			return new CharsetEncoder (enc);
-		}
+//		public static CharsetDecoder NewDecoder (this Encoding enc)
+//		{
+//			return new CharsetDecoder (enc);
+//		}
+//
+//		public static CharsetEncoder NewEncoder (this Encoding enc)
+//		{
+//			return new CharsetEncoder (enc);
+//		}
 
 		public static int NumberOfLeadingZeros (int val)
 		{
@@ -661,21 +661,21 @@ namespace Sharpen
 			return val;
 		}
 
-		public static int GetTotalInFixed (this Inflater inf)
-		{
-			if (inf.TotalIn > 0)
-				return Convert.ToInt32( inf.TotalIn ) + 4;
-			else
-				return 0;
-		}
-		
-		public static int GetRemainingInputFixed (this Inflater inf)
-		{
-			if (inf.RemainingInput >= 4)
-				return inf.RemainingInput - 4;
-			else
-				return 0;
-		}
+//		public static int GetTotalInFixed (this Inflater inf)
+//		{
+//			if (inf.TotalIn > 0)
+//				return Convert.ToInt32( inf.TotalIn ) + 4;
+//			else
+//				return 0;
+//		}
+//		
+//		public static int GetRemainingInputFixed (this Inflater inf)
+//		{
+//			if (inf.RemainingInput >= 4)
+//				return inf.RemainingInput - 4;
+//			else
+//				return 0;
+//		}
 		
 		public static string GetTestName (object obj)
 		{

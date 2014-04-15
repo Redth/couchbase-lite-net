@@ -85,7 +85,6 @@
     <Compile Include="Sharpen\CyclicBarrier.cs" />
     <Compile Include="Sharpen\DataConverter.cs" />
     <Compile Include="Sharpen\DateFormat.cs" />
-    <Compile Include="Sharpen\DeflaterOutputStream.cs" />
     <Compile Include="Sharpen\DigestInputStream.cs" />
     <Compile Include="Sharpen\DigestOutputStream.cs" />
     <Compile Include="Sharpen\EnumSet.cs" />
@@ -111,7 +110,6 @@
     <Compile Include="Sharpen\GZIPInputStream.cs" />
     <Compile Include="Sharpen\GZIPOutputStream.cs" />
     <Compile Include="Sharpen\HttpURLConnection.cs" />
-    <Compile Include="Sharpen\InflaterInputStream.cs" />
     <Compile Include="Sharpen\InheritableThreadLocal.cs" />
     <Compile Include="Sharpen\InputStream.cs" />
     <Compile Include="Sharpen\InputStreamReader.cs" />
@@ -251,9 +249,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="Mono.Data.Sqlite" />
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>..\packages\ICSharpCode.SharpZipLib.dll.0.85.4.369\lib\net20\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="System.Net.Http.WebRequest" />
     <Reference Include="System.Net" />
     <Reference Include="System.Net.Http.Formatting">
