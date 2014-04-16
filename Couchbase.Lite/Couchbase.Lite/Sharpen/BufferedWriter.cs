@@ -93,7 +93,9 @@ namespace Sharpen
 		
 		public void Close ()
 		{
+			#if !PORTABLE
 			writer.Close ();
+			#endif
 		}
 	}
 }

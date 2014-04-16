@@ -48,9 +48,15 @@ namespace Sharpen
 
 	internal class FileWriter : StreamWriter
 	{
+		#if PORTABLE
+		public FileWriter (FilePath path) : base(Couchbase.Lite.File.OpenStream(path.GetPath (), true))
+		{
+		}
+		#else
 		public FileWriter (FilePath path) : base(path.GetPath ())
 		{
 		}
+		#endif
 		
 		public FileWriter Append (string sequence)
 		{

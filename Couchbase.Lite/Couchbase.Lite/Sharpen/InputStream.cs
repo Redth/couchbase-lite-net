@@ -72,14 +72,21 @@ namespace Sharpen
 
 		public virtual void Close ()
 		{
+			#if !PORTABLE
 			if (Wrapped != null) {
 				Wrapped.Close ();
 			}
+			#endif
 		}
 
 		public void Dispose ()
 		{
 			Close ();
+
+			#if PORTABLE
+			if (Wrapped != null)
+				Wrapped.Dispose ();
+			#endif
 		}
 
 		internal Stream GetWrappedStream ()

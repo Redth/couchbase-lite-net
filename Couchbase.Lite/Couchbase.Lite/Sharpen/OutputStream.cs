@@ -62,14 +62,20 @@ namespace Sharpen
 		
 		public virtual void Close ()
 		{
+			#if !PORTABLE
 			if (this.Wrapped != null) {
 				this.Wrapped.Close ();
 			}
+			#endif
 		}
 
 		public void Dispose ()
 		{
 			this.Close ();
+
+			#if PORTABLE
+			this.Dispose();
+			#endif
 		}
 
 		public virtual void Flush ()

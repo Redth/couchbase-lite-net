@@ -48,7 +48,7 @@ namespace Sharpen
 
 	internal class RandomAccessFile
 	{
-		private readonly FileStream stream;
+		private readonly Stream stream;
 
 		public RandomAccessFile (FilePath file, string mode) : this(file.GetPath (), mode)
 		{
@@ -56,21 +56,29 @@ namespace Sharpen
 
 		public RandomAccessFile (string file, string mode)
 		{
+			#if PORTABLE
+			stream = Couchbase.Lite.File.OpenStream(file, mode.IndexOf('w') != -1);
+			#else
 			if (mode.IndexOf ('w') != -1)
 				stream = new FileStream (file, System.IO.FileMode.OpenOrCreate, FileAccess.ReadWrite);
 			else
 				stream = new FileStream (file, System.IO.FileMode.Open, FileAccess.Read);
+			#endif
 		}
 
 		public void Close ()
 		{
+			#if !PORTABLE
 			stream.Close ();
+			#else
+			stream.Dispose();
+			#endif
 		}
 
-		public FileChannel GetChannel ()
-		{
-			return new FileChannel (this.stream);
-		}
+//		public FileChannel GetChannel ()
+//		{
+//			return new FileChannel (this.stream);
+//		}
 
 		public long GetFilePointer ()
 		{

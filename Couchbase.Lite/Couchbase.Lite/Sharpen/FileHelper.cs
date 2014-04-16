@@ -44,8 +44,11 @@
 using System;
 using System.IO;
 using System.Reflection;
+#if PORTABLE
+using Couchbase.Lite;
+#else
 using System.Security.AccessControl;
-
+#endif
 namespace Sharpen
 {
 	class FileHelper
@@ -64,12 +67,20 @@ namespace Sharpen
 
 		public virtual bool CanWrite (FilePath path)
 		{
+			#if PORTABLE
+			return true;
+			#else
 			return ((File.GetAttributes (path) & FileAttributes.ReadOnly) == 0);
+			#endif
 		}
 		
         public virtual bool CanRead (FilePath path)
         {
+			#if PORTABLE
+			return true;
+			#else
             return Exists(path) && ((File.GetAttributes (path) & FileAttributes.Offline) == 0);
+			#endif
         }
 
 		public virtual bool Delete (FilePath path)
@@ -135,11 +146,13 @@ namespace Sharpen
 
 		public virtual void MakeFileWritable (FilePath file)
 		{
+			#if !PORTABLE
 			FileAttributes fileAttributes = File.GetAttributes (file);
 			if ((fileAttributes & FileAttributes.ReadOnly) != 0) {
 				fileAttributes &= ~FileAttributes.ReadOnly;
 				File.SetAttributes (file, fileAttributes);
 			}
+			#endif
 		}
 
 		public virtual bool RenameTo (FilePath path, string name)
@@ -159,6 +172,9 @@ namespace Sharpen
 
 		public virtual bool SetReadOnly (FilePath path)
 		{
+			#if PORTABLE
+			return true;
+			#else
 			try {
 				var fileAttributes = File.GetAttributes (path) | FileAttributes.ReadOnly;
 				File.SetAttributes (path, fileAttributes);
@@ -166,6 +182,7 @@ namespace Sharpen
 			} catch {
 				return false;
 			}
+			#endif
 		}
 
 		public virtual bool SetLastModified(FilePath path, long milis)

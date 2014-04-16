@@ -80,7 +80,8 @@ namespace Sharpen
 		
 		public override string ToString ()
 		{
-			return System.Text.Encoding.UTF8.GetString (ToByteArray ());
+			var data = ToByteArray ();
+			return System.Text.Encoding.UTF8.GetString (data, 0, data.Length);
 		}
 	}
 }

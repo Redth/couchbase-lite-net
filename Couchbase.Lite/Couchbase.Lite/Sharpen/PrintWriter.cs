@@ -50,10 +50,14 @@ namespace Sharpen
 	internal class PrintWriter : TextWriter
 	{
 		TextWriter writer;
-		
+
 		public PrintWriter (FilePath path)
 		{
+			#if PORTABLE
+			writer = new StreamWriter(Couchbase.Lite.File.OpenStream(path, true));
+			#else
 			writer = new StreamWriter (path);
+			#endif
 		}
 
 		public PrintWriter (TextWriter other)
@@ -64,11 +68,18 @@ namespace Sharpen
 		public override Encoding Encoding {
 			get { return writer.Encoding; }
 		}
-		
+
+		#if PORTABLE
+		public void Close ()
+		{
+			//writer.Close ();
+		}
+		#else
 		public override void Close ()
 		{
 			writer.Close ();
 		}
+		#endif
 	
 		public override void Flush ()
 		{
@@ -100,17 +111,29 @@ namespace Sharpen
 			writer.Write (buffer);
 		}
 	
+		#if PORTABLE
+		public void Write (string format, object arg0, object arg1, object arg2)
+		#else
 		public override void Write (string format, object arg0, object arg1, object arg2)
+		#endif
 		{
 			writer.Write (format, arg0, arg1, arg2);
 		}
 	
+		#if PORTABLE
+		public void Write (string format, object arg0, object arg1)
+		#else
 		public override void Write (string format, object arg0, object arg1)
+		#endif
 		{
 			writer.Write (format, arg0, arg1);
 		}
 	
+		#if PORTABLE
+		public void Write (string format, object arg0)
+		#else
 		public override void Write (string format, object arg0)
+		#endif
 		{
 			writer.Write (format, arg0);
 		}
@@ -130,17 +153,29 @@ namespace Sharpen
 			writer.WriteLine (buffer);
 		}
 	
+		#if PORTABLE
+		public void WriteLine (string format, object arg0, object arg1, object arg2)
+		#else
 		public override void WriteLine (string format, object arg0, object arg1, object arg2)
+		#endif
 		{
 			writer.WriteLine (format, arg0, arg1, arg2);
 		}
 	
+		#if PORTABLE
+		public void WriteLine (string format, object arg0, object arg1)
+		#else
 		public override void WriteLine (string format, object arg0, object arg1)
+		#endif
 		{
 			writer.WriteLine (format, arg0, arg1);
 		}
 	
+		#if PORTABLE
+		public void WriteLine (string format, object arg0)
+		#else
 		public override void WriteLine (string format, object arg0)
+		#endif
 		{
 			writer.WriteLine (format, arg0);
 		}

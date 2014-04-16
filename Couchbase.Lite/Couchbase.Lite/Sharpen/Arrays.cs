@@ -124,7 +124,11 @@ namespace Sharpen
         public static T[] CopyTo<T> (T[] original, Int64 length)
         {
             var copy = new T[length];
-            Array.Copy(original, copy, length < original.Length ? length : original.LongLength);
+			#if PORTABLE		
+			Array.Copy(original, copy, length < original.Length ? (int)length : original.Length);
+			#else
+			Array.Copy(original, copy, length < original.Length ? length : original.LongLength);
+			#endif
             return copy;
         }
 	}

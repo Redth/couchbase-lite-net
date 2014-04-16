@@ -71,7 +71,11 @@ namespace Sharpen
 			get { return ost; }
 		}
 
+		#if PORTABLE
+		public void Close ()
+		#else
 		public override void Close ()
+		#endif
 		{
 			if (this.ist != null) {
 				this.ist.Close ();

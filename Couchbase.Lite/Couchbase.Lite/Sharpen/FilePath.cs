@@ -45,8 +45,12 @@ namespace Sharpen
 {
 	using System;
 	using System.Collections.Generic;
-	using System.IO;
 	using System.Threading;
+	#if PORTABLE
+	using Couchbase.Lite;
+	#else
+	using System.IO;
+	#endif
 
 	public class FilePath
 	{
@@ -120,7 +124,11 @@ namespace Sharpen
 		public bool CreateNewFile ()
 		{
 			try {
+				#if PORTABLE
+				File.Create(path);
+				#else
 				File.Open (path, FileMode.CreateNew).Close ();
+				#endif
 				return true;
 			} catch {
 				return false;
@@ -160,7 +168,8 @@ namespace Sharpen
 			try {
 				return FileHelper.Instance.Delete (this);
 			} catch (Exception exception) {
-				Console.WriteLine (exception);
+
+				//Console.WriteLine (exception);
 				return false;
 			}
 		}

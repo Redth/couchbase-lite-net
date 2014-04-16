@@ -135,15 +135,15 @@ namespace Sharpen
 			return new IndexOutOfRangeException ("Index: " + index);
 		}
 
-		public static CultureInfo CreateLocale (string language, string country, string variant)
-		{
-			return CultureInfo.GetCultureInfo ("en-US");
-		}
+//		public static CultureInfo CreateLocale (string language, string country, string variant)
+//		{
+//			return CultureInfo.GetCultureInfo ("en-US");
+//		}
 
-		public static string Name (this Encoding e)
-		{
-			return e.BodyName.ToUpper ();
-		}
+//		public static string Name (this Encoding e)
+//		{
+//			return e.BodyName.ToUpper ();
+//		}
 		
 		public static string Decode (this Encoding e, byte[] chars, int start, int len)
 		{
@@ -254,21 +254,21 @@ namespace Sharpen
 //			return old;
 //		}
 
-		public static CultureInfo GetEnglishCulture ()
-		{
-			return CultureInfo.GetCultureInfo ("en-US");
-		}
+//		public static CultureInfo GetEnglishCulture ()
+//		{
+//			return CultureInfo.GetCultureInfo ("en-US");
+//		}
 
 		public static T GetFirst<T> (this IList<T> list)
 		{
 			return ((list.Count == 0) ? default(T) : list[0]);
 		}
 
-		public static CultureInfo GetGermanCulture ()
-		{
-			CultureInfo r =  CultureInfo.GetCultureInfo ("de-DE");
-			return r;
-		}
+//		public static CultureInfo GetGermanCulture ()
+//		{
+//			CultureInfo r =  CultureInfo.GetCultureInfo ("de-DE");
+//			return r;
+//		}
 
 		public static T GetLast<T> (this IList<T> list)
 		{
@@ -280,66 +280,66 @@ namespace Sharpen
 			return (int)tzone.GetUtcOffset (MillisToDateTimeOffset (date, 0).DateTime).TotalMilliseconds;
 		}
 
-		public static InputStream GetResourceAsStream (this Type type, string name)
-		{
-            Stream manifestResourceStream = type.Assembly.GetManifestResourceStream (name);
-			if (manifestResourceStream == null) {
-				return null;
-			}
-			return InputStream.Wrap (manifestResourceStream);
-		}
+//		public static InputStream GetResourceAsStream (this Type type, string name)
+//		{
+//            Stream manifestResourceStream = type.Assembly.GetManifestResourceStream (name);
+//			if (manifestResourceStream == null) {
+//				return null;
+//			}
+//			return InputStream.Wrap (manifestResourceStream);
+//		}
 
 		public static long GetTime (this DateTime dateTime)
 		{
 			return new DateTimeOffset (DateTime.SpecifyKind (dateTime, DateTimeKind.Utc), TimeSpan.Zero).ToMillisecondsSinceEpoch ();
 		}
 
-		public static TimeZoneInfo GetTimeZone (string tzone)
-		{
-			try {
-				TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById (tzone);
-				return tz;
-			} catch {
-				// Not found
-			}
+//		public static TimeZoneInfo GetTimeZone (string tzone)
+//		{
+//			try {
+//				TimeZoneInfo tz = TimeZoneInfo.FindSystemTimeZoneById (tzone);
+//				return tz;
+//			} catch {
+//				// Not found
+//			}
+//
+//            // Mono and Java allow you to specify timezones by short id (i.e. EST instead of Eastern Standard Time).
+//            // Mono on Windows and the microsoft framewokr on windows do not allow this. This hack is to compensate
+//            // for that and allow you to match 'EST' to 'Eastern Standard Time' by matching the first letter of each
+//            // word to the corresponding character in the short string. Bleh.
+//			if (tzone.Length <= 4) {
+//				foreach (var timezone in TimeZoneInfo.GetSystemTimeZones ()) {
+//					var parts = timezone.Id.Split (new [] {' '}, StringSplitOptions.RemoveEmptyEntries);
+//					if (parts.Length == tzone.Length) {
+//						bool found = true;
+//						for (int i = 0; i <parts.Length; i++)
+//							found &= parts[i][0] == tzone[i];
+//
+//						if (found)
+//							return timezone;
+//					}
+//				}
+//			}
+//			char[] separator = new char[] { ':' };
+//			string[] strArray = tzone.Substring (4).Split (separator);
+//			int hours, minutes;
+//			if (strArray.Length == 1 && strArray[0].Length > 2) {
+//				hours = int.Parse (strArray[0].Substring (0, 2));
+//				minutes = int.Parse (strArray[0].Substring (2));
+//			} else {
+//				hours = int.Parse (strArray[0]);
+//				minutes = (strArray.Length <= 1) ? 0 : int.Parse (strArray[1]);
+//			}
+//			TimeSpan t = new TimeSpan (0, hours, minutes, 0, 0);
+//			if (tzone[3] == '-')
+//				t = -t;
+//			return TimeZoneInfo.CreateCustomTimeZone (tzone, t, tzone, tzone);
+//		}
 
-            // Mono and Java allow you to specify timezones by short id (i.e. EST instead of Eastern Standard Time).
-            // Mono on Windows and the microsoft framewokr on windows do not allow this. This hack is to compensate
-            // for that and allow you to match 'EST' to 'Eastern Standard Time' by matching the first letter of each
-            // word to the corresponding character in the short string. Bleh.
-			if (tzone.Length <= 4) {
-				foreach (var timezone in TimeZoneInfo.GetSystemTimeZones ()) {
-					var parts = timezone.Id.Split (new [] {' '}, StringSplitOptions.RemoveEmptyEntries);
-					if (parts.Length == tzone.Length) {
-						bool found = true;
-						for (int i = 0; i <parts.Length; i++)
-							found &= parts[i][0] == tzone[i];
-
-						if (found)
-							return timezone;
-					}
-				}
-			}
-			char[] separator = new char[] { ':' };
-			string[] strArray = tzone.Substring (4).Split (separator);
-			int hours, minutes;
-			if (strArray.Length == 1 && strArray[0].Length > 2) {
-				hours = int.Parse (strArray[0].Substring (0, 2));
-				minutes = int.Parse (strArray[0].Substring (2));
-			} else {
-				hours = int.Parse (strArray[0]);
-				minutes = (strArray.Length <= 1) ? 0 : int.Parse (strArray[1]);
-			}
-			TimeSpan t = new TimeSpan (0, hours, minutes, 0, 0);
-			if (tzone[3] == '-')
-				t = -t;
-			return TimeZoneInfo.CreateCustomTimeZone (tzone, t, tzone, tzone);
-		}
-
-		public static void InitCause (this Exception ex, Exception cause)
-		{
-			Console.WriteLine (cause);
-		}
+//		public static void InitCause (this Exception ex, Exception cause)
+//		{
+//			Console.WriteLine (cause);
+//		}
 
         public static bool IsEmpty (this String str)
         {
@@ -676,34 +676,36 @@ namespace Sharpen
 //			else
 //				return 0;
 //		}
-		
-		public static string GetTestName (object obj)
-		{
-			return GetTestName ();
-		}
-		
-		public static string GetTestName ()
-		{
-			MethodBase met;
-			int n = 0;
-			do {
-				met = new StackFrame (n).GetMethod ();
-				if (met != null) {
-					foreach (Attribute at in met.GetCustomAttributes (true)) {
-						if (at.GetType().FullName == "NUnit.Framework.TestAttribute") {
-							// Convert back to camel case
-							string name = met.Name;
-							if (char.IsUpper (name[0]))
-								name = char.ToLower (name[0]) + name.Substring (1);
-							return name;
-						}
-					}
-				}
-				n++;
-			} while (met != null);
-			return "";
-		}
-		
+
+
+//		public static string GetTestName (object obj)
+//		{
+//			return GetTestName ();
+//		}
+//			
+//		public static string GetTestName ()
+//		{
+//			MethodBase met;
+//			int n = 0;
+//			do {
+//				met = new StackFrame (n).GetMethod ();
+//				if (met != null) {
+//					foreach (Attribute at in met.GetCustomAttributes (true)) {
+//						if (at.GetType().FullName == "NUnit.Framework.TestAttribute") {
+//							// Convert back to camel case
+//							string name = met.Name;
+//							if (char.IsUpper (name[0]))
+//								name = char.ToLower (name[0]) + name.Substring (1);
+//							return name;
+//						}
+//					}
+//				}
+//				n++;
+//			} while (met != null);
+//			return "";
+//		}
+
+
 //		public static string GetHostAddress (this IPAddress addr)
 //		{
 //			return addr.ToString ();
@@ -736,10 +738,10 @@ namespace Sharpen
 			return string.IsNullOrEmpty (uri.Query) ? null : uri.Query;
 		}
 		
-		public static HttpURLConnection OpenConnection (this Uri uri)
-		{
-            return new HttpURLConnection (uri, null);
-		}
+//		public static HttpURLConnection OpenConnection (this Uri uri)
+//		{
+//            return new HttpURLConnection (uri, null);
+//		}
 		
 		public static Uri ToURI (this Uri uri)
 		{

@@ -71,9 +71,9 @@ namespace Sharpen
 		{
 			switch (algorithm.ToLower ()) {
 			case "sha-1":
-				return new MessageDigest<SHA1Managed> ();
+				return new MessageDigestImpl(new SHA1Managed ());
 			case "md5":
-				return new MessageDigest<MD5CryptoServiceProvider> ();
+				return new MessageDigestImpl(new MD5CryptoServiceProvider ());
 			}
 			throw new NotSupportedException (string.Format ("The requested algorithm \"{0}\" is not supported.", algorithm));
 		}
@@ -85,13 +85,14 @@ namespace Sharpen
 	}
 
 
-	public class MessageDigest<TAlgorithm> : MessageDigest where TAlgorithm : HashAlgorithm, new()
+	public class MessageDigestImpl : MessageDigest
 	{
-		private TAlgorithm _hash;
+		private HashAlgorithm _hash;
 		private CryptoStream _stream;
 
-		public MessageDigest ()
+		public MessageDigestImpl (HashAlgorithm hashAlgo)
 		{
+			_hash = hashAlgo;
 			this.Init ();
 		}
 
@@ -118,7 +119,6 @@ namespace Sharpen
 
 		private void Init ()
 		{
-			this._hash = Activator.CreateInstance<TAlgorithm> ();
 			this._stream = new CryptoStream (Stream.Null, this._hash, CryptoStreamMode.Write);
 		}
 
@@ -141,7 +141,7 @@ namespace Sharpen
 		public override void Update (byte[] input, int index, int count)
 		{
 			if (count < 0)
-				Console.WriteLine ("Argh!");
+				System.Diagnostics.Debug.WriteLine ("Argh!");
 			this._stream.Write (input, index, count);
 		}
 	}

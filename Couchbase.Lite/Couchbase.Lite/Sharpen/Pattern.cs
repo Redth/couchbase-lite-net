@@ -60,22 +60,31 @@ namespace Sharpen
 
 		public static Pattern Compile (string pattern)
 		{
-			return new Pattern (new Regex (pattern, RegexOptions.Compiled));
+			#if PORTABLE
+			var rxopt = RegexOptions.None;
+			#else
+			var rxopt = RegexOptions.Compiled;
+			#endif
+			return new Pattern (new Regex (pattern, rxopt));
 		}
 
 		public static Pattern Compile (string pattern, int flags)
 		{
-			RegexOptions compiled = RegexOptions.Compiled;
+			#if PORTABLE
+			var rxopt = RegexOptions.None;
+			#else
+			var rxopt = RegexOptions.Compiled;
+			#endif
 			if ((flags & 1) != CASE_INSENSITIVE) {
-				compiled |= RegexOptions.IgnoreCase;
+				rxopt |= RegexOptions.IgnoreCase;
 			}
 			if ((flags & 2) != DOTALL) {
-				compiled |= RegexOptions.Singleline;
+				rxopt |= RegexOptions.Singleline;
 			}
 			if ((flags & 4) != MULTILINE) {
-				compiled |= RegexOptions.Multiline;
+				rxopt |= RegexOptions.Multiline;
 			}
-			return new Pattern (new Regex (pattern, compiled));
+			return new Pattern (new Regex (pattern, rxopt));
 		}
 
 		public Sharpen.Matcher Matcher (string txt)

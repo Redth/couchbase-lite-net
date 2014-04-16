@@ -49,7 +49,11 @@ namespace Sharpen {
     public static class StringExtensions {
 
         public static int CompareToIgnoreCase(this String a, String b) {
+			#if PORTABLE
+			return string.Compare(a, b, StringCompare.IgnoreCase);
+			#else
             return String.Compare(a, b, true, CultureInfo.InvariantCulture);
+			#endif
         }
     }
 

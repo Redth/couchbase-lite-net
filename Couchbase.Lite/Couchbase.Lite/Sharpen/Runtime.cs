@@ -50,7 +50,9 @@ using System.Runtime.CompilerServices;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+#if !PORTABLE
 using ProcessStartInfo = System.Diagnostics.ProcessStartInfo;
+#endif
 using System.Linq;
 
 namespace Sharpen
@@ -103,19 +105,19 @@ namespace Sharpen
 //			}
 //		}
 
-		internal static string Getenv (string var)
-		{
-			return Environment.GetEnvironmentVariable (var);
-		}
-
-		internal static IDictionary<string, string> GetEnv ()
-		{
-			Dictionary<string, string> dictionary = new Dictionary<string, string> ();
-			foreach (DictionaryEntry v in Environment.GetEnvironmentVariables ()) {
-				dictionary[(string)v.Key] = (string)v.Value;
-			}
-			return dictionary;
-		}
+//		internal static string Getenv (string var)
+//		{
+//			return Environment.GetEnvironmentVariable (var);
+//		}
+//
+//		internal static IDictionary<string, string> GetEnv ()
+//		{
+//			Dictionary<string, string> dictionary = new Dictionary<string, string> ();
+//			foreach (DictionaryEntry v in Environment.GetEnvironmentVariables ()) {
+//				dictionary[(string)v.Key] = (string)v.Value;
+//			}
+//			return dictionary;
+//		}
 
 //		internal static IPAddress GetLocalHost ()
 //		{
@@ -199,10 +201,10 @@ namespace Sharpen
 			return Encoding.GetEncoding (encoding).GetBytes (str);
 		}
 
-		internal static FieldInfo[] GetDeclaredFields (Type t)
-		{
-			return t.GetFields (BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-		}
+//		internal static FieldInfo[] GetDeclaredFields (Type t)
+//		{
+//			return t.GetFields (BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+//		}
 
 		internal static void NotifyAll (object ob)
 		{
@@ -211,7 +213,7 @@ namespace Sharpen
 
 		internal static void PrintStackTrace (Exception ex)
 		{
-            Console.WriteLine (ex); // TODO: Replace these Console calls with Logger.
+			System.Diagnostics.Debug.WriteLine (ex);
 		}
 
 		internal static void PrintStackTrace (Exception ex, TextWriter tw)
@@ -239,15 +241,15 @@ namespace Sharpen
 			return Monitor.Wait (ob, (int)milis);
 		}
 		
-		internal static Type GetType (string name)
-		{
-			foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies ()) {
-				Type t = a.GetType (name);
-				if (t != null)
-					return t;
-			}
-			throw new InvalidOperationException ("Type not found: " + name);
-		}
+//		internal static Type GetType (string name)
+//		{
+//			foreach (Assembly a in AppDomain.CurrentDomain.GetAssemblies ()) {
+//				Type t = a.GetType (name);
+//				if (t != null)
+//					return t;
+//			}
+//			throw new InvalidOperationException ("Type not found: " + name);
+//		}
 		
 		internal static void SetCharAt (StringBuilder sb, int index, char c)
 		{
@@ -271,12 +273,14 @@ namespace Sharpen
 
 		internal static string GetStringForBytes (IEnumerable<Byte> chars)
 		{
-            return Encoding.UTF8.GetString (chars.ToArray());
+			var data = chars.ToArray ();
+			return Encoding.UTF8.GetString (data, 0, data.Length);
 		}
 
 		internal static string GetStringForBytes (IEnumerable<Byte> chars, string encoding)
 		{
-            return GetEncoding (encoding).GetString (chars.ToArray());
+			var data = chars.ToArray ();
+			return GetEncoding (encoding).GetString (data, 0, data.Length);
 		}
 
 		internal static string GetStringForBytes (IEnumerable<Byte> chars, int start, int len)

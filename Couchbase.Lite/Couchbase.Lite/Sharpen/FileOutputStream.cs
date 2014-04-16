@@ -62,6 +62,10 @@ namespace Sharpen
 
 		public FileOutputStream (string file, bool append)
 		{
+			#if PORTABLE
+			//TODO: How to deal with Append?
+			base.Wrapped = Couchbase.Lite.File.OpenStream(file, true);
+			#else
 			try {
 				if (append) {
 					base.Wrapped = File.Open (file, System.IO.FileMode.Append, FileAccess.Write);
@@ -71,6 +75,7 @@ namespace Sharpen
 			} catch (DirectoryNotFoundException) {
 				throw new FileNotFoundException ("File not found: " + file);
 			}
+			#endif
 		}
 
 		#if !PORTABLE

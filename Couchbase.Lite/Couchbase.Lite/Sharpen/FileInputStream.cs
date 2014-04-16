@@ -41,6 +41,9 @@
 * either express or implied. See the License for the specific language governing permissions
 * and limitations under the License.
 */
+using Couchbase.Lite;
+
+
 namespace Sharpen
 {
 	using System;
@@ -57,7 +60,11 @@ namespace Sharpen
 			if (!File.Exists (file)) {
 				throw new FileNotFoundException ("File not found", file);
 			}
+			#if PORTABLE
+			base.Wrapped = File.OpenStream(file, true);
+			#else
 			base.Wrapped = new FileStream (file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+			#endif
 		}
 
 		#if !PORTABLE

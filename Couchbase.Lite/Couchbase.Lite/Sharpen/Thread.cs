@@ -41,6 +41,9 @@
 * either express or implied. See the License for the specific language governing permissions
 * and limitations under the License.
 */
+using System.Threading.Tasks;
+
+
 namespace Sharpen
 {
 	using System;
@@ -48,20 +51,126 @@ namespace Sharpen
 	using System.Collections.Generic;
 
     #if PORTABLE
-    internal class Thread
+	internal class Thread : Runnable
     {
-        public string Name { 
-            get { 
-                return "Unknown";
-            }
-        }
+		public Thread () : this(null, null, null)
+		{
+		}
+
+		public Thread (string name) : this (null, null, name)
+		{
+		}
+
+		public Thread (ThreadGroup grp, string name) : this (null, grp, name)
+		{
+		}
+
+		public Thread (Runnable runnable): this (runnable, null, null)
+		{
+		}
+
+		public Thread (Runnable runnable, string name): this (runnable, null, name)
+		{
+		}
+
+		Thread (Runnable runnable, ThreadGroup grp, string name)
+		{
+			cancelTokenSource = new CancellationTokenSource ();
+			task = new Task (InternalRun, cancelTokenSource.Token, TaskCreationOptions.LongRunning);
+
+			Runnable = runnable ?? this;
+			tgroup = grp ?? defaultGroup;
+			tgroup.Add (this);
+			Name = name ?? "Unknown";
+		}
+
+		static ThreadGroup defaultGroup = new ThreadGroup();
+
+		[ThreadStatic]
+		static Sharpen.Thread wrapperThread;
+
+		ThreadGroup tgroup;
+		public string Name { get; set; }
+          
+		public Runnable Runnable { get; private set; }
 
         public string GetName() { return Name; }
+
+		CancellationTokenSource cancelTokenSource;
+		Task task;
+		bool interrupted = false;
 
 		static Thread current = new Thread();
 		public static Thread CurrentThread() 
 		{
 			return current; 
+		}
+
+		public void Interrupt ()
+		{
+			lock (task) {
+				interrupted = true;
+				cancelTokenSource.Cancel ();
+			}
+		}
+
+		public static bool Interrupted ()
+		{
+			if (Sharpen.Thread.wrapperThread == null) {
+				return false;
+			}
+			Sharpen.Thread wrapperThread = Sharpen.Thread.wrapperThread;
+			lock (wrapperThread) {
+				bool interrupted = Sharpen.Thread.wrapperThread.interrupted;
+				Sharpen.Thread.wrapperThread.interrupted = false;
+				return interrupted;
+			}
+		}
+
+		public bool IsAlive ()
+		{
+			return !task.IsCompleted;
+		}
+
+		public void Join ()
+		{
+			task.Wait ();
+		}
+
+		public void Join (long timeout)
+		{
+			task.Wait ((int)timeout);
+		}
+
+		public static void Sleep (long milis)
+		{
+			Task.Delay ((int)milis).Wait ();
+		}
+
+		public void Start ()
+		{
+			task.Start ();
+		}
+
+		public void Abort ()
+		{
+
+		}
+
+		public virtual void Run ()
+		{
+		}
+
+		void InternalRun ()
+		{
+			wrapperThread = this;
+			try {
+				Runnable.Run ();
+			} catch (Exception exception) {
+				System.Diagnostics.Debug.WriteLine (exception);
+			} finally {
+				tgroup.Remove (this);
+			}
 		}
     }
     #else
@@ -214,7 +323,7 @@ namespace Sharpen
 		}
 		
 	}
-
+	#endif
 	internal class ThreadGroup
 	{
 		private List<Thread> threads = new List<Thread> ();
@@ -249,6 +358,5 @@ namespace Sharpen
 				return count;
 			}
 		}
-	}
-    #endif
+	}    
 }

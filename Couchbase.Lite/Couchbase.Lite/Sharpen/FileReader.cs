@@ -47,8 +47,14 @@ namespace Sharpen
 
 	internal class FileReader : InputStreamReader
 	{
+		#if PORTABLE
+		public FileReader (FilePath f) : base(Couchbase.Lite.File.OpenStream(f.GetPath ()))
+		{
+		}
+		#else
 		public FileReader (FilePath f) : base(f.GetPath ())
 		{
 		}
+		#endif
 	}
 }

@@ -67,7 +67,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 using System;
+#if PORTABLE
+using System.Net;
+#else
 using System.Web;
+#endif
 
 namespace Sharpen
 {
