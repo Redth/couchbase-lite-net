@@ -316,11 +316,18 @@ namespace Couchbase.Lite
             var s1 = CreateStringFromJSON(str1, start1, out endPos1);
             var s2 = CreateStringFromJSON(str2, start2, out endPos2);
 
+			#if PORTABLE
+			//TODO: Fix CompareStringsUnicode for PCL
+			//Not sure this is really the same as the SortKey method
+			// Need to research and fix
+			return String.CompareOrdinal (s1, s2);
+			#else
             // TODO: Detect current localization and use the corresponding CompareInfo
-            var comp = CultureInfo.InvariantCulture.CompareInfo;
+			var comp = CultureInfo.InvariantCulture.CompareInfo;
             var sk1 = comp.GetSortKey(s1);
             var sk2 = comp.GetSortKey(s2);
             return SortKey.Compare(sk1, sk2);
+			#endif
         }
 
         ///

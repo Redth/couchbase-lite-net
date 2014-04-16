@@ -53,9 +53,11 @@ using Sharpen;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+#if !PORTABLE
 using System.Web;
-using System.Threading;
 using System.Web.UI;
+#endif
+using System.Threading;
 using System.Threading.Tasks;
 //using Newtonsoft.Json.Linq;
 
@@ -231,7 +233,11 @@ namespace Couchbase.Lite.Replicator
 			{
 				result = new Uri(dbURLString);
 			}
+			#if PORTABLE
+			catch (FormatException e)
+			#else
 			catch (UriFormatException e)
+			#endif
 			{
                 Log.E(Tag, this + ": Changes feed ULR is malformed", e);
 			}

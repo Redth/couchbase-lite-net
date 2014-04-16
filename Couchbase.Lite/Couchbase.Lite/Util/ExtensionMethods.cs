@@ -49,6 +49,11 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.IO;
 using System.Collections.Generic;
+#if PORTABLE
+using System.Net;
+#else
+using System.Web;
+#endif
 
 namespace Couchbase.Lite
 {
@@ -104,7 +109,7 @@ namespace Couchbase.Lite
             Debug.Assert(request.RequestUri != null);
 
             var unescapedUserInfo = request.RequestUri.UserEscaped
-                                    ? System.Web.HttpUtility.UrlDecode(request.RequestUri.UserInfo)
+                                    ? HttpUtility.UrlDecode(request.RequestUri.UserInfo)
                                     : request.RequestUri.UserInfo;
 
             var userAndPassword = unescapedUserInfo.Split(new[] { ':' }, 1, StringSplitOptions.None);

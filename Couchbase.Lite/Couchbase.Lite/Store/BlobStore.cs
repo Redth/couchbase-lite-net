@@ -179,7 +179,11 @@ namespace Couchbase.Lite
 			{
 				try
 				{
+					#if PORTABLE
+					return File.OpenStream(file, false);
+					#else
                     return new FileStream(file, FileMode.Open);
+					#endif
 				}
 				catch (FileNotFoundException e)
 				{
@@ -382,7 +386,11 @@ namespace Couchbase.Lite
 				}
 				catch (Exception e)
 				{
-                    Runtime.PrintStackTrace(e, Console.Error);
+					#if PORTABLE
+					Runtime.PrintStackTrace(e);
+					#else
+					Runtime.PrintStackTrace(e, Console.Error);
+					#endif
 				}
 			}
             return magic == GZIPInputStream.GzipMagic;

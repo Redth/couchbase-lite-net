@@ -44,7 +44,12 @@
 
 using System;
 using System.Text;
+using System.Net;
+
+
+#if !PORTABLE
 using System.Web;
+#endif
 
 using Sharpen;
 using System.Linq;
@@ -311,7 +316,8 @@ namespace Couchbase.Lite.Util
 						i += 3;
 					}
 					while (i < s.Length && s[i] == '%');
-                    result.Append(charset.GetString(@out.ToByteArray()));
+					var outBytes = @out.ToByteArray ();
+					result.Append(charset.GetString(outBytes, 0, outBytes.Length));
                     @out.Reset();
 				}
 				else

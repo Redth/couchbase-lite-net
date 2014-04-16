@@ -55,7 +55,11 @@ using Sharpen;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Diagnostics;
+#if PORTABLE
+using System.Net;
+#else
 using System.Web;
+#endif
 using System.Linq;
 using Newtonsoft.Json.Linq;
 
@@ -467,7 +471,7 @@ namespace Couchbase.Lite.Replicator
                         else
                         {
                             Log.W(Tag, this + " failed to write " + rev + ": status=" + e.GetCBLStatus().GetCode());
-                            LastError = new HttpException((Int32)e.GetCBLStatus().GetCode(), null);
+							LastError = new HttpResponseException(e.GetCBLStatus().GetHttpStatusCode());
                             continue;
                         }
                     }

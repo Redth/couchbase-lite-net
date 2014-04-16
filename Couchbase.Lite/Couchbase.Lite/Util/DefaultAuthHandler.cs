@@ -53,9 +53,11 @@ using Sharpen;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+#if !PORTABLE
 using System.Web;
-using System.Threading;
 using System.Web.UI;
+#endif
+using System.Threading;
 
 namespace Couchbase.Lite.Replicator
 {
@@ -105,7 +107,12 @@ namespace Couchbase.Lite.Replicator
 
         private IEnumerator GetEnumerator() 
         {
+            #if PORTABLE
+            //TODO: Figure out PCL Implementation
+            return null;
+            #else
             return AuthenticationManager.RegisteredModules; 
+            #endif
         }
 
         private readonly HttpClientHandler context;

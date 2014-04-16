@@ -124,7 +124,11 @@ namespace Couchbase.Lite
                     {
                         remoteWithQueryRemoved = new UriBuilder(remote.Scheme, remote.GetHost(), remote.Port, remote.AbsolutePath).Uri;
                     }
+					#if PORTABLE
+					catch (FormatException e)
+					#else
                     catch (UriFormatException e)
+					#endif
                     {
                         throw new ArgumentException("Invalid URI format.", "remote", e);
                     }
@@ -139,7 +143,11 @@ namespace Couchbase.Lite
                 {
                     RemoteUrl = new UriBuilder(remote.Scheme, remote.GetHost(), remote.Port, remote.AbsolutePath).Uri;
                 }
+				#if PORTABLE
+				catch (FormatException e)
+				#else
                 catch (UriFormatException e)
+				#endif
                 {
                     throw new ArgumentException("Invalid URI format.", "remote", e);
                 }
@@ -350,13 +358,17 @@ namespace Couchbase.Lite
         {
             Log.D(Tag, this + "|" + Sharpen.Thread.CurrentThread() + ": checkSessionAtPath() calling asyncTaskStarted()");
             AsyncTaskStarted();
-            SendAsyncRequest(HttpMethod.Get, sessionPath, null, (result, e) => {
+			SendAsyncRequest(HttpMethod.Get, sessionPath, null, (result, e) => {
                 try
                 {
                     if (e != null)
                     {
-                        if (e is HttpException && ((HttpException)e).GetHttpCode() == 404
-                            && sessionPath.Equals("/_session", StringComparison.InvariantCultureIgnoreCase)) {
+						//JON D - It looks like the SendAsyncRequest may send back a special case for HttpResponseException
+						// but not HttpException from System.Web (in fact HttpResponseException does not inherit from HttpException).
+						// I'm assuming this was the intended behaviour below:
+						//   OLD: if (e is HttpException && ((HttpException)e).GetHttpCode() == 404
+						if (Is404(e)						 
+							&& sessionPath.Equals("/_session", StringCompare.IgnoreCase)) {
                             CheckSessionAtPath ("_session");
                             return;
                         }
@@ -472,7 +484,15 @@ namespace Couchbase.Lite
 
         private static bool Is404(Exception e)
         {
-            return e is HttpException && ((HttpException)e).GetHttpCode () == 404;
+			//JON D
+			//This check is used on the result of the SendAsyncRequest methods. 
+			//If you look at SendAsyncRequest in Replication.cs you'll see that
+			//if the http status code was not 200 ok, it will create a
+			//HttpResponseException as the exception
+			//So, the code that *was* here would never test true since it's checking for
+			//HttpException as the class
+			return e is HttpResponseException && ((HttpResponseException)e).StatusCode == HttpStatusCode.NotFound;
+			//return e is HttpException && ((HttpException)e).GetHttpCode () == 404;
         }
 
         internal abstract void BeginReplicating();
@@ -663,7 +683,11 @@ namespace Couchbase.Lite
                 var url = new Uri(urlStr);
                 SendAsyncRequest(method, url, body, completionHandler);
             }
+			#if PORTABLE
+			catch (FormatException e)
+			#else
             catch (UriFormatException e)
+			#endif
             {
                 Log.E(Tag, "Malformed URL for async request", e);
             }
@@ -708,7 +732,7 @@ namespace Couchbase.Lite
                     }
                     return response.Result;
                 }, CancellationTokenSource.Token)
-                .ContinueWith(response => {
+				.ContinueWith(response => {
                     if (completionHandler != null) {
                         var fullBody = mapper.ReadValue<Object>(response.Result.Content.ReadAsStreamAsync().Result);
 
@@ -718,7 +742,10 @@ namespace Couchbase.Lite
                             error = new HttpResponseException(response.Result.StatusCode); 
                         }
 
-                        completionHandler (fullBody, response.Exception);
+						//JON D - assuming here you meant to send the error instance back to the completonHandler
+						// otherwise you wouldn't have taken care to create a HttpResponseException
+						completionHandler (fullBody, error);
+						//completionHandler (fullBody, response.Exception);
                     }
                 });
         }
@@ -780,7 +807,7 @@ namespace Couchbase.Lite
                         {
                             var response = responseMessage.Result;
                             // add in cookies to global store
-                            CouchbaseLiteHttpClientFactory.Instance.AddCookies(clientFactory.HttpHandler.CookieContainer.GetCookies(url));
+							CouchbaseLiteHttpClientFactory.Instance.AddCookies(clientFactory.HttpHandler.CookieContainer.GetCookies(url), url);
                                
                             var status = response.StatusCode;
                             if ((Int32)status.GetStatusCode() >= 300)
@@ -789,7 +816,7 @@ namespace Couchbase.Lite
                                     ()));
                                 Log.E(Database.Tag, "Request was for: " + message);
                                 Log.E(Database.Tag, "Status reason: " + response.ReasonPhrase);
-                                error = new HttpException((Int32)status.GetStatusCode(), response.ReasonPhrase);
+								error = new HttpResponseException(status); //, response.ReasonPhrase);
                             }
                         else
                         {
@@ -884,7 +911,11 @@ namespace Couchbase.Lite
                     }
                     }));
             }
+			#if PORTABLE
+			catch (FormatException e)
+			#else
             catch (UriFormatException e)
+			#endif
             {
                 Log.E(Database.Tag, "Malformed URL for async request", e);
             }
@@ -898,7 +929,11 @@ namespace Couchbase.Lite
                 var urlStr = BuildRelativeURLString(relativePath);
                 url = new Uri(urlStr);
             }
+			#if PORTABLE
+			catch (FormatException e)
+			#else
             catch (UriFormatException e)
+			#endif
             {
                 throw new ArgumentException("Invalid URI format.", e);
             }

@@ -75,17 +75,8 @@ namespace Couchbase.Lite
 		private byte[] md5DigestResult;
 
 		/// <summary>Message digest for sha1 that is updated as data is appended</summary>
-		#if PORTABLE
-		Org.BouncyCastle.Crypto.Digests.Sha1Digest sha1Digest;
-		#else
 		private MessageDigest sha1Digest;
-		#endif
-
-		#if PORTABLE
-		Org.BouncyCastle.Crypto.Digests.MD5Digest md5Digest;
-		#else
 		private MessageDigest md5Digest;
-		#endif
 		private BufferedOutputStream outStream;
 
 		private FilePath tempFile;
@@ -95,17 +86,10 @@ namespace Couchbase.Lite
 			this.store = store;
 			try
 			{
-				#if PORTABLE
-				sha1Digest = new Org.BouncyCastle.Crypto.Digests.Sha1Digest();
-				sha1Digest.Reset();
-				md5Digest = new Org.BouncyCastle.Crypto.Digests.MD5Digest();
-				md5Digest.Reset();
-				#else
 				sha1Digest = MessageDigest.GetInstance("SHA-1");
 				sha1Digest.Reset();
 				md5Digest = MessageDigest.GetInstance("MD5");
 				md5Digest.Reset();
-				#endif
 			}
 			catch (NoSuchAlgorithmException e)
 			{
@@ -145,13 +129,8 @@ namespace Couchbase.Lite
 				throw new RuntimeException("Unable to write to stream.", e);
 			}
 			length += dataVector.Length;
-			#if PORTABLE
-			sha1Digest.BlockUpdate(dataVector, 0, dataVector.Length);
-			md5Digest.BlockUpdate(dataVector, 0, dataVector.Length);
-			#else
 			sha1Digest.Update(dataVector);
 			md5Digest.Update(dataVector);
-			#endif
 		}
 
 		internal void Read(InputStream inputStream)
@@ -164,13 +143,8 @@ namespace Couchbase.Lite
 				while ((len = inputStream.Read(buffer)) != -1)
 				{
 					outStream.Write(buffer, 0, len);
-					#if PORTABLE
-					sha1Digest.BlockUpdate(buffer, 0, buffer.Length);
-					md5Digest.BlockUpdate(buffer, 0, buffer.Length);
-					#else
 					sha1Digest.Update(buffer);
 					md5Digest.Update(buffer);
-					#endif
 					length += len;
 				}
 			}

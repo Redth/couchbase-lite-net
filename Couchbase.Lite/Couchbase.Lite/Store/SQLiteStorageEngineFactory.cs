@@ -51,7 +51,11 @@ namespace Couchbase.Lite.Storage
 	{
 		public static SQLiteStorageEngine CreateStorageEngine()
 		{
+			#if PORTABLE
+			return new PclSqliteStorageEngine();
+			#else
             return new MonoSQLiteStorageEngine();
+			#endif
 		}
 	}
 }

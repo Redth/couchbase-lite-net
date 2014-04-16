@@ -74,7 +74,11 @@ namespace Couchbase.Lite.Util
 		{
             if (!File.Exists(destFile.FullName))
 			{
+				#if PORTABLE
+				File.Create(destFile.FullName);
+				#else
                 File.Open (destFile.FullName, FileMode.CreateNew).Close ();
+				#endif
 			}
 
             sourceFile.CopyTo(destFile.FullName);

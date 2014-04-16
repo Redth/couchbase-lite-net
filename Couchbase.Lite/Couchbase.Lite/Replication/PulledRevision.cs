@@ -55,7 +55,9 @@ using Sharpen;
 using System.Threading.Tasks;
 using System.Net.Http;
 using System.Diagnostics;
+#if !PORTABLE
 using System.Web;
+#endif
 
 namespace Couchbase.Lite.Replicator
 {

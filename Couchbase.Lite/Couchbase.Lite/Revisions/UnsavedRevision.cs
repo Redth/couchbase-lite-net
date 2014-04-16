@@ -278,11 +278,16 @@ namespace Couchbase.Lite
         public void SetAttachment(String name, String contentType, Uri contentUrl) {
             try
             {
-                var inputStream = contentUrl.OpenConnection().GetInputStream();
-                var length = inputStream.Length;
-                var inputBytes = inputStream.ReadAllBytes();
-                inputStream.Close();
-                SetAttachment(name, contentType, inputBytes);
+                var http = new System.Net.Http.HttpClient();
+				using (var inputStream = http.GetStreamAsync(contentUrl).Result) {	                
+	                var length = inputStream.Length;
+	                var inputBytes = inputStream.ReadAllBytes();
+					#if !PORTABLE
+	                inputStream.Close();
+					#endif
+
+					SetAttachment(name, contentType, inputBytes);
+				}
             }
             catch (IOException e)
             {

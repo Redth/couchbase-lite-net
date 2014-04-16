@@ -168,7 +168,11 @@ namespace Couchbase.Lite.Auth
 					}
                     origin = originURL.ToString().ToLower();
 				}
+				#if PORTABLE
+				catch (FormatException e)
+				#else
 				catch (UriFormatException e)
+				#endif
 				{
 					string message = "Error registering assertion: " + assertion;
 					Log.E(Database.Tag, message, e);
@@ -217,8 +221,10 @@ namespace Couchbase.Lite.Auth
 					+ " found.  Expected 4+");
 			}
 
-            var component1Decoded = Encoding.UTF8.GetString(Convert.FromBase64String(components[1]));
-            var component3Decoded = Encoding.UTF8.GetString(Convert.FromBase64String(components[3]));
+			var comp1Buffer = Convert.FromBase64String (components [1]);
+			var component1Decoded = Encoding.UTF8.GetString (comp1Buffer, 0, comp1Buffer.Length);
+			var comp3Buffer = Convert.FromBase64String (components [3]);
+			var component3Decoded = Encoding.UTF8.GetString(comp3Buffer, 0, comp3Buffer.Length);
 			try
 			{
                 var mapper = Manager.GetObjectMapper();
@@ -226,10 +232,12 @@ namespace Couchbase.Lite.Auth
                 var component1Json = mapper.ReadValue<IDictionary<Object, Object>>(component1Decoded);
                 var principal = (IDictionary<Object, Object>)component1Json.Get("principal");
 
-				result.Put(AssertionFieldEmail, principal.Get("email"));
+				result.Add(AssertionFieldEmail, (string)principal.Get("email"));
+				//result.Put(AssertionFieldEmail, principal.Get("email"));
 
                 var component3Json = mapper.ReadValue<IDictionary<Object, Object>>(component3Decoded);
-				result.Put(AssertionFieldOrigin, component3Json.Get("aud"));
+				result.Add(AssertionFieldOrigin, component3Json.Get("aud"));
+				//result.Put(AssertionFieldOrigin, component3Json.Get("aud"));
 
                 var expObject = (long)component3Json.Get("exp");
 				Log.D(Database.Tag, "PersonaAuthorizer exp: " + expObject + " class: " + expObject.GetType());

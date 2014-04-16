@@ -55,16 +55,24 @@ namespace Couchbase.Lite.Util
 	{
 		public virtual void V(string tag, string msg)
 		{
+			#if PORTABLE
+			Debug.WriteLine(tag + ": " + msg);
+			#else
             try {
-                Trace.WriteLine(tag + ": " + msg);
+				Trace.WriteLine(tag + ": " + msg);
             } catch (ThreadInterruptedException ex) {
                 // swallow.
             }
+			#endif
 		}
 
 		public virtual void V(string tag, string msg, Exception tr)
 		{
+			#if PORTABLE
+			Debug.WriteLine(tag + ": " + msg + "\n" + GetStackTraceString(tr));
+			#else
 			Trace.WriteLine(tag + ": " + msg + "\n" + GetStackTraceString(tr));
+			#endif
 		}
 
 		public virtual void D(string tag, string msg)
@@ -79,12 +87,20 @@ namespace Couchbase.Lite.Util
 
 		public virtual void I(string tag, string msg)
 		{
+			#if PORTABLE
+			Debug.WriteLine(tag + ": " + msg);
+			#else
 			Trace.TraceInformation(tag + ": " + msg);
+			#endif
 		}
 
 		public virtual void I(string tag, string msg, Exception tr)
 		{
+			#if PORTABLE
+			Debug.WriteLine(tag + ": " + msg + "\n" + GetStackTraceString(tr));
+			#else
 			Trace.TraceInformation(tag + ": " + msg + "\n" + GetStackTraceString(tr));
+			#endif
 		}
 
 		public virtual void W(string tag, string msg)
@@ -104,19 +120,31 @@ namespace Couchbase.Lite.Util
 
 		public virtual void E(string tag, string msg)
 		{
+			#if PORTABLE
+			Debug.WriteLine(tag + ": " + msg);
+			#else
 			Trace.TraceError(tag + ": " + msg);
+			#endif
 		}
 
 		public virtual void E(string tag, string msg, Exception tr)
 		{
+			#if PORTABLE
+			Debug.WriteLine(tag + ": " + msg + "\n" + GetStackTraceString(tr));
+			#else
 			Trace.TraceError(tag + ": " + msg + "\n" + GetStackTraceString(tr));
+			#endif
 		}
 
 		private static string GetStackTraceString(Exception tr)
 		{
 			if (tr == null)
 			{
+				#if PORTABLE
+				return string.Empty;
+				#else
                 return Environment.StackTrace;
+				#endif
 			}
 			StringWriter stringWriter = new StringWriter();
 			PrintWriter printWriter = new PrintWriter(stringWriter);

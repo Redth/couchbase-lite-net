@@ -265,7 +265,7 @@ namespace Couchbase.Lite.Support
 						{
                             var headersBytes = Arrays.CopyTo(buffer.ToArray(), r.GetLocation()); // 
                             // var headersBytes = new ArraySegment<Byte>(buffer.ToArray(), 0, r.GetLocation()); // <-- better?
-                            var headersString = utf8.GetString(headersBytes);
+							var headersString = utf8.GetString(headersBytes, 0, headersBytes.Length);
 							ParseHeaders(headersString);
 							DeleteUpThrough(r.GetLocation() + r.GetLength());
 							readerDelegate.StartedPart(headers);

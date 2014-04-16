@@ -481,6 +481,15 @@ namespace Couchbase.Lite.Storage
 				}
 				else
 				{
+					#if PORTABLE
+					bool parseVal = false;
+					if (value is bool || bool.TryParse(value.ToString(), out parseVal)) {
+						return parseVal;
+					} else {
+						Log.E(Tag, "Cannot cast value for " + key + " to a Boolean: " + value, e);
+						return null;
+					}
+					#else
                     if (value is IConvertible)
 					{
                         return Convert.ToBoolean(value);
@@ -490,6 +499,7 @@ namespace Couchbase.Lite.Storage
 						Log.E(Tag, "Cannot cast value for " + key + " to a Boolean: " + value, e);
 						return null;
 					}
+					#endif
 				}
 			}
 		}

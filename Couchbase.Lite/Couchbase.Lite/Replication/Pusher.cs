@@ -54,7 +54,12 @@ using Couchbase.Lite.Util;
 using Sharpen;
 using System.Threading.Tasks;
 using System.Net.Http;
+using System.Net;
+
+
+#if !PORTABLE
 using System.Web;
+#endif
 using System.Net.Http.Headers;
 using Newtonsoft.Json.Linq;
 using System.Linq;
@@ -110,7 +115,7 @@ namespace Couchbase.Lite.Replicator
                 {
                     try
                     {
-                        if (e is HttpException && ((HttpException)e).ErrorCode != 412) 
+                        if (e is HttpResponseException && ((HttpResponseException)e).StatusCode != HttpStatusCode.PreconditionFailed) 
                         {
                             // this is fatal: no db to push to!
                             Log.E(Tag, this + ": Failed to create remote db", e);

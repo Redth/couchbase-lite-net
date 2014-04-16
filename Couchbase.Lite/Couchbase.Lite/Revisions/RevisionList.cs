@@ -50,7 +50,9 @@ using Sharpen;
 namespace Couchbase.Lite
 {
 	/// <summary>An ordered list of TDRevisions</summary>
+	#if !PORTABLE
 	[System.Serializable]
+	#endif
     internal class RevisionList : AList<RevisionInternal>
 	{
 		public RevisionList() : base()

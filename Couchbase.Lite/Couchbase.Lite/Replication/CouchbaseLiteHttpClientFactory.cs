@@ -78,8 +78,9 @@ namespace Couchbase.Lite.Support
 
             // NOTE: Probably could set httpHandler.MaxRequestContentBufferSize to Couchbase Lite 
             // max doc size (~16 MB) plus some overhead.
-            var client = HttpClientFactory.Create(handler, new DefaultAuthHandler(handler));
-            return client;
+			//var client = HttpClientFactory.Create(handler, new DefaultAuthHandler(handler));
+			var c = new HttpClient (handler);
+            return c;
 		}
 
         public HttpClientHandler HttpHandler {
@@ -88,10 +89,10 @@ namespace Couchbase.Lite.Support
             }
         }
 
-        public void AddCookies(CookieCollection cookies)
+		public void AddCookies(CookieCollection cookies, Uri url)
 		{
             lock (locker) {
-                cookieStore.Add(cookies);
+				cookieStore.Add (url, cookies);
             }
 		}
 	}

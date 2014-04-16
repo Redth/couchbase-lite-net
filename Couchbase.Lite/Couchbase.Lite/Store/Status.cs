@@ -44,6 +44,7 @@
 
 using Sharpen;
 using System;
+using System.Net;
 
 namespace Couchbase.Lite
 {
@@ -103,6 +104,12 @@ namespace Couchbase.Lite
         public virtual StatusCode GetCode()
 		{
 			return code;
+		}
+
+		public virtual HttpStatusCode GetHttpStatusCode()
+		{
+			var intCode = (int)GetCode ();
+			return (HttpStatusCode)Enum.ToObject (typeof(HttpStatusCode), intCode);
 		}
 
         public virtual void SetCode(StatusCode code)
