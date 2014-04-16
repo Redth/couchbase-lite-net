@@ -320,9 +320,6 @@
     <Compile Include="..\Couchbase.Lite\Sharpen\GZIPOutputStream.cs">
       <Link>Couchbase.Lite\Sharpen\GZIPOutputStream.cs</Link>
     </Compile>
-    <Compile Include="..\Couchbase.Lite\Sharpen\HttpURLConnection.cs">
-      <Link>Couchbase.Lite\Sharpen\HttpURLConnection.cs</Link>
-    </Compile>
     <Compile Include="..\Couchbase.Lite\Sharpen\InputStream.cs">
       <Link>Couchbase.Lite\Sharpen\InputStream.cs</Link>
     </Compile>
@@ -397,9 +394,6 @@
     </Compile>
     <Compile Include="..\Couchbase.Lite\Sharpen\ReferenceQueue.cs">
       <Link>Couchbase.Lite\Sharpen\ReferenceQueue.cs</Link>
-    </Compile>
-    <Compile Include="..\Couchbase.Lite\Sharpen\ResourceBundle.cs">
-      <Link>Couchbase.Lite\Sharpen\ResourceBundle.cs</Link>
     </Compile>
     <Compile Include="..\Couchbase.Lite\Sharpen\Runnable.cs">
       <Link>Couchbase.Lite\Sharpen\Runnable.cs</Link>
@@ -552,11 +546,36 @@
       <Link>Couchbase.Lite\Sharpen\Thread.cs</Link>
     </Compile>
     <Compile Include="BufferedStream.cs" />
+    <Compile Include="HttpUtility.cs" />
+    <Compile Include="..\Couchbase.Lite\Sharpen\MessageDigest.cs">
+      <Link>Couchbase.Lite\Sharpen\MessageDigest.cs</Link>
+    </Compile>
+    <Compile Include="Security\CryptoStream.cs" />
+    <Compile Include="Security\CryptoStreamMode.cs" />
+    <Compile Include="Security\ICryptoTransform.cs" />
+    <Compile Include="Security\MD5CryptoServiceProvider.cs" />
+    <Compile Include="Security\MD5.cs" />
+    <Compile Include="Security\HashAlgorithm.cs" />
+    <Compile Include="Security\Locale.cs" />
+    <Compile Include="Security\CryptoConfig.cs" />
+    <Compile Include="Security\SHA1CryptoServiceProvider.cs" />
+    <Compile Include="Security\SHA1.cs" />
+    <Compile Include="Security\SHA1Managed.cs" />
+    <Compile Include="..\Couchbase.Lite\Sharpen\PrintWriter.cs">
+      <Link>Couchbase.Lite\Sharpen\PrintWriter.cs</Link>
+    </Compile>
+    <Compile Include="..\Couchbase.Lite\Sharpen\RandomAccessFile.cs">
+      <Link>Couchbase.Lite\Sharpen\RandomAccessFile.cs</Link>
+    </Compile>
+    <Compile Include="Security\CryptographicnexpectedOperationException.cs" />
+    <Compile Include="Security\CryptographicException.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <ItemGroup>
     <Folder Include="Couchbase.Lite\" />
     <Folder Include="Properties\" />
+    <Folder Include="Mono.Security\" />
+    <Folder Include="Security\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\Couchbase.Lite\packages.config">
@@ -586,8 +605,8 @@
     <Reference Include="SQLitePCL">
       <HintPath>..\packages\SQLitePCL.3.8.4.2\lib\portable-net45+wp8+win8\SQLitePCL.dll</HintPath>
     </Reference>
-    <Reference Include="crypto">
-      <HintPath>..\packages\Portable.BouncyCastle.1.7.0\lib\portable-net4+sl5+wp8+win8\crypto.dll</HintPath>
+    <Reference Include="System.IO.Compression">
+      <HintPath>..\packages\Microsoft.Bcl.Compression.3.9.83\lib\portable-net45+win8+wp8+wpa81\System.IO.Compression.dll</HintPath>
     </Reference>
   </ItemGroup>
 </Project>

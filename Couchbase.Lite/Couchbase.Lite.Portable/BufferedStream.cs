@@ -35,7 +35,7 @@ using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace System.IO {
-	[ComVisible (true)]
+	//[ComVisible (true)]
 	public sealed class BufferedStream : Stream {
 		Stream m_stream;
 		byte[] m_buffer;
@@ -115,7 +115,11 @@ namespace System.IO {
 			if (m_buffer != null)
 				Flush();
 
+			#if !PORTABLE
 			m_stream.Close();
+			#else
+			m_stream.Dispose();
+			#endif
 			m_buffer = null;
 			disposed = true;
 		}
@@ -215,7 +219,7 @@ namespace System.IO {
 			m_buffer [m_buffer_pos++] = value;
 		}
 
-		public override int Read ([In,Out] byte[] array, int offset, int count) 
+		public override int Read ([Out] byte[] array, int offset, int count) 
 		{
 			if (array == null)
 				throw new ArgumentNullException ("array");

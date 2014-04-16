@@ -128,7 +128,7 @@ namespace Couchbase.Lite
 				return Encoding.UTF8.GetBytes (str);
 			}
 
-			return stepResult [columnIndex] as byte[];
+			return statement [columnIndex] as byte[];
 
 //			var chunkBuffer = new byte[chunkSize];
 //			var blob = new List<Byte>(chunkSize); // We know we'll be reading at least 1 chunk, so pre-allocate now to avoid an immediate resize.

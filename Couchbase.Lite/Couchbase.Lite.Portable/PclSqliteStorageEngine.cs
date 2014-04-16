@@ -6,6 +6,7 @@ using System.Text;
 using Couchbase.Lite.Storage;
 using System.Collections.Generic;
 using Sharpen;
+using Couchbase.Lite.Util;
 
 namespace Couchbase.Lite
 {
@@ -14,6 +15,8 @@ namespace Couchbase.Lite
 		public PclSqliteStorageEngine ()
 		{
 		}
+
+		private const String Tag = "PclSqliteStorageEngine";
 
 		int transactionCount = 0;
 		SQLiteConnection connection;
@@ -30,7 +33,7 @@ namespace Couchbase.Lite
 
 				CreateFunctions ();
 			} catch (Exception ex) {
-				Log.E(Tag, "Error opening the Sqlite connection using connection String: {0}".Fmt(connectionString.ToString()), ex);
+				Log.E(Tag, string.Format("Error opening the Sqlite connection using connection String: {0}", path), ex);
 				result = false;    
 			}
 
@@ -79,10 +82,10 @@ namespace Couchbase.Lite
 			var result = -1;
 
 			try {
-				using (var cmd = connection.Prepare ("PRAGMA user_version;")) {
-					var stmt = cmd.Step ();
+				using (var stmt = connection.Prepare ("PRAGMA user_version;")) {
+					var r = stmt.Step ();
 
-					if (cmd.Step () == SQLiteResult.ROW)
+					if (stmt.Step () == SQLiteResult.ROW)
 						result = (Int32)stmt [0];
 				}
 			} catch (Exception e) {
@@ -193,7 +196,7 @@ namespace Couchbase.Lite
 
 		public override void Close ()
 		{
-			connection.Close ();
+			//connection.Close ();
 			connection.Dispose ();
 			connection = null;
 		}
@@ -292,7 +295,7 @@ namespace Couchbase.Lite
 
 			// Append our content column names and create our SQL parameters.
 			var valueSet = values.ValueSet();
-			var sqlParams = new Dictionary<string, object> (valueSet.LongCount ()); 
+			var sqlParams = new Dictionary<string, object> (); 
 			var valueBuilder = new StringBuilder();
 			var index = 0L;
 
