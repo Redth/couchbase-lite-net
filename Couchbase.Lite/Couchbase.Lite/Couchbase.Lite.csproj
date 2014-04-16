@@ -100,7 +100,6 @@
     <Compile Include="Sharpen\FileLock.cs" />
     <Compile Include="Sharpen\FileOutputStream.cs" />
     <Compile Include="Sharpen\FilePath.cs" />
-    <Compile Include="Sharpen\FileReader.cs" />
     <Compile Include="Sharpen\FileWriter.cs" />
     <Compile Include="Sharpen\FilenameFilter.cs" />
     <Compile Include="Sharpen\FilterInputStream.cs" />
@@ -108,7 +107,6 @@
     <Compile Include="Sharpen\Future.cs" />
     <Compile Include="Sharpen\GZIPInputStream.cs" />
     <Compile Include="Sharpen\GZIPOutputStream.cs" />
-    <Compile Include="Sharpen\HttpURLConnection.cs" />
     <Compile Include="Sharpen\InheritableThreadLocal.cs" />
     <Compile Include="Sharpen\InputStream.cs" />
     <Compile Include="Sharpen\InputStreamReader.cs" />
@@ -140,7 +138,6 @@
     <Compile Include="Sharpen\ReentrantLock.cs" />
     <Compile Include="Sharpen\Reference.cs" />
     <Compile Include="Sharpen\ReferenceQueue.cs" />
-    <Compile Include="Sharpen\ResourceBundle.cs" />
     <Compile Include="Sharpen\Runnable.cs" />
     <Compile Include="Sharpen\Runtime.cs" />
     <Compile Include="Sharpen\SSLContext.cs" />
