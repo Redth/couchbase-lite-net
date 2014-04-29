@@ -280,14 +280,16 @@ namespace Sharpen
 			return (int)tzone.GetUtcOffset (MillisToDateTimeOffset (date, 0).DateTime).TotalMilliseconds;
 		}
 
-//		public static InputStream GetResourceAsStream (this Type type, string name)
-//		{
-//            Stream manifestResourceStream = type.Assembly.GetManifestResourceStream (name);
-//			if (manifestResourceStream == null) {
-//				return null;
-//			}
-//			return InputStream.Wrap (manifestResourceStream);
-//		}
+        #if !PORTABLE
+		public static InputStream GetResourceAsStream (this Type type, string name)
+		{
+            Stream manifestResourceStream = type.Assembly.GetManifestResourceStream (name);
+			if (manifestResourceStream == null) {
+				return null;
+			}
+			return InputStream.Wrap (manifestResourceStream);
+		}
+        #endif
 
 		public static long GetTime (this DateTime dateTime)
 		{
@@ -737,12 +739,14 @@ namespace Sharpen
 		{
 			return string.IsNullOrEmpty (uri.Query) ? null : uri.Query;
 		}
-		
-//		public static HttpURLConnection OpenConnection (this Uri uri)
-//		{
-//            return new HttpURLConnection (uri, null);
-//		}
-		
+
+        #if !PORTABLE
+		public static HttpURLConnection OpenConnection (this Uri uri)
+		{
+            return new HttpURLConnection (uri, null);
+		}
+        #endif
+
 		public static Uri ToURI (this Uri uri)
 		{
 			return uri;

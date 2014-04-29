@@ -220,10 +220,10 @@ namespace Sharpen
 			return path;
 		}
 
-		public bool IsAbsolute ()
-		{
-			return Path.IsPathRooted (path);
-		}
+//		public bool IsAbsolute ()
+//		{
+//			return Path.IsPathRooted (path);
+//		}
 
 		public bool IsDirectory ()
 		{

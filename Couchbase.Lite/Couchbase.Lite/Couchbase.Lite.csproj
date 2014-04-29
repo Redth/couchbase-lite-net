@@ -3,8 +3,6 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>12.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{18AE9E93-AF27-47A0-921C-1846941643B6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <RootNamespace>Couchbase.Lite</RootNamespace>
@@ -238,6 +236,8 @@
     <Compile Include="Util\StringUtils.cs" />
     <Compile Include="Store\JsonCollator.cs" />
     <Compile Include="Replication\HttpResponseException.cs" />
+    <Compile Include="Sharpen\HttpURLConnection.cs" />
+    <Compile Include="Sharpen\ResourceBundle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />

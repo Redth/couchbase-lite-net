@@ -9,19 +9,30 @@ namespace Couchbase.Lite
 		AllDirectories
 	}
 
+	public class FileStorage
+	{
+		static IFolder root;
+
+		public static IFolder Root {
+			get {
+				if (root == null)
+					root = FileSystem.Current.LocalStorage;
+				return root;
+			}
+		}
+	}
+
 	public class DirectoryInfo
 	{
-		IFolder root;
 		IFolder folder;
 
 		public DirectoryInfo (string name)
 		{
-			root = FileSystem.Current.LocalStorage;
-
-			folder = root.CreateFolderAsync (name,
+			folder = FileStorage.Root.CreateFolderAsync (name,
 				CreationCollisionOption.OpenIfExists).Result;
 
 			//TODO: Handle LastWriteTimeUtc? 
+			LastWriteTimeUtc = DateTime.MinValue;
 		}
 
 		public bool Exists {
@@ -41,6 +52,7 @@ namespace Couchbase.Lite
 
 		public void Create()
 		{
+			//Will already be created
 		}
 
 		public void Refresh()
@@ -49,17 +61,17 @@ namespace Couchbase.Lite
 
 		public void Delete(bool recursive = false)
 		{
-
+			folder.DeleteAsync ().RunSynchronously();
 		}
 
 		public void MoveTo(string destinationPath)
 		{
-
+			//TODO: Implement MoveTo
 		}
 
 		public FileInfo[] EnumerateFiles(string pattern, SearchOption opt)
 		{
-			var files = root.GetFilesAsync ().Result;
+			var files = FileStorage.Root.GetFilesAsync ().Result;
 
 			return (from f in files
 				where System.Text.RegularExpressions.Regex.IsMatch (f.Name, pattern)
@@ -69,26 +81,33 @@ namespace Couchbase.Lite
 
 	public class FileInfo 
 	{
+		IFile file;
+
 		public FileInfo(string name)
 		{
-			Name = name;
+			FullName = name;
+
+			file = FileStorage.Root.GetFileAsync (name).Result;
 
 			//TODO: Handle LastWriteTimeUtc ?
+			LastWriteTimeUtc = DateTime.MinValue;
 		}
 
 		public bool Exists {
 			get {
-				return true;
+				return file != null && FileStorage.Root.CheckExistsAsync(Name).Result == ExistenceCheckResult.FileExists;
 			}
 		}
 
 		public string Name {
-			get;
-			private set;
+			get {
+				return Path.GetFileName (FullName);
+			}
 		}
 
 		public string FullName {
-			get { return Name; }
+			get;
+			private set;
 		}
 			
 		public int Length { 
@@ -103,12 +122,13 @@ namespace Couchbase.Lite
 		public bool MoveTo(string name)
 		{
 			return false;
-		}
 
+		}
 
 		public string CopyTo(string destination)
 		{
 			return string.Empty;
+			//using (var 
 		}
 
 	}
@@ -125,12 +145,10 @@ namespace Couchbase.Lite
 			return true;
 		}
 
-
 		public static void CreateDirectory(string path)
 		{
 
 		}
-
 
 		public static string[] GetFileSystemEntries(string path)
 		{
@@ -182,36 +200,41 @@ namespace Couchbase.Lite
 	{
 		public static char PathSeparator {
 			get {
-				return '/';
+				return PortablePath.DirectorySeparatorChar;
 			}
 		}
 
 		public static char DirectorySeparatorChar {
 			get {
-				return '/';
+				return PortablePath.DirectorySeparatorChar;
 			}
 		}
 
 		public static char AltDirectorySeparatorChar {
 			get {
-				return '/';
+				return PortablePath.DirectorySeparatorChar;
 			}
 		}
 
 		public static char VolumeSeparatorChar {
 			get {
-				return '/';
+				return PortablePath.DirectorySeparatorChar;
 			}
 		}
 
 		public static string GetFileNameWithoutExtension(string fullName) 
 		{
-			return string.Empty;
+			var fileName = GetFileName (fullName);
+
+			var ext = "";
+			//TODO: Get extension
+
+			return ext;
 		}
 
-		public static string Combine(params string[] parts)
+		public static string Combine(params string[] paths)
 		{
-			return string.Empty;
+			return PortablePath.Combine(paths);
 		}
 
 		public static string GetDirectoryName(string fullName)
@@ -223,12 +246,7 @@ namespace Couchbase.Lite
 		{
 			return string.Empty;
 		}
-
-		public static bool IsPathRooted(string path)
-		{
-			return false;
-		}
-
+			
 		public static string GetFullPath(string path)
 		{
 			return path;

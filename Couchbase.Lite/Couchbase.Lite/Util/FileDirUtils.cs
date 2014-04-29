@@ -69,50 +69,49 @@ namespace Couchbase.Lite.Util
 			return f.Delete() || !f.Exists();
 		}
 
-		/// <exception cref="System.IO.IOException"></exception>
-        public static void CopyFile(FileInfo sourceFile, FileInfo destFile)
-		{
-            if (!File.Exists(destFile.FullName))
-			{
-				#if PORTABLE
-				File.Create(destFile.FullName);
-				#else
-                File.Open (destFile.FullName, FileMode.CreateNew).Close ();
-				#endif
-			}
+//		/// <exception cref="System.IO.IOException"></exception>
+//        public static void CopyFile(FileInfo sourceFile, FileInfo destFile)
+//		{
+//            if (!File.Exists(destFile.FullName))
+//			{
+//				#if PORTABLE
+//				File.Create(destFile.FullName);
+//				#else
+//                File.Open (destFile.FullName, FileMode.CreateNew).Close ();
+//				#endif
+//			}
+//
+//            sourceFile.CopyTo(destFile.FullName);
+//		}
 
-            sourceFile.CopyTo(destFile.FullName);
-		}
-
-		#if !PORTABLE
-		/// <exception cref="System.IO.IOException"></exception>
-        public static void CopyFolder(FileSystemInfo sourcePath, FileSystemInfo destinationPath)
-		{
-            var sourceDirectory = sourcePath as DirectoryInfo;
-            if (sourceDirectory != null)
-			{
-                var destPath = Path.Combine(Path.GetDirectoryName(destinationPath.FullName), Path.GetFileName(sourceDirectory.Name));
-                var destinationDirectory = new DirectoryInfo(destPath);
-
-				//if directory not exists, create it
-                if (!destinationDirectory.Exists)
-				{
-                    destinationDirectory.Create();
-				}
-				//list all the directory contents
-                var fileInfos = sourceDirectory.EnumerateFileSystemInfos();
-                foreach (var fileInfo in fileInfos)
-				{
-					//construct the src and dest file structure
-					//recursive copy
-                    CopyFolder(fileInfo, destinationDirectory);
-				}
-			}
-			else
-			{
-                CopyFile((FileInfo)sourcePath, (FileInfo)destinationPath);
-			}
-		}
-		#endif
+//		/// <exception cref="System.IO.IOException"></exception>
+//        public static void CopyFolder(FileSystemInfo sourcePath, FileSystemInfo destinationPath)
+//		{
+//            var sourceDirectory = sourcePath as DirectoryInfo;
+//            if (sourceDirectory != null)
+//			{
+//                var destPath = Path.Combine(Path.GetDirectoryName(destinationPath.FullName), Path.GetFileName(sourceDirectory.Name));
+//                var destinationDirectory = new DirectoryInfo(destPath);
+//
+//				//if directory not exists, create it
+//                if (!destinationDirectory.Exists)
+//				{
+//                    destinationDirectory.Create();
+//				}
+//				//list all the directory contents
+//                var fileInfos = sourceDirectory.EnumerateFileSystemInfos();
+//                foreach (var fileInfo in fileInfos)
+//				{
+//					//construct the src and dest file structure
+//					//recursive copy
+//                    CopyFolder(fileInfo, destinationDirectory);
+//				}
+//			}
+//			else
+//			{
+//                CopyFile((FileInfo)sourcePath, (FileInfo)destinationPath);
+//			}
+//		}
+//		
 	}
 }
