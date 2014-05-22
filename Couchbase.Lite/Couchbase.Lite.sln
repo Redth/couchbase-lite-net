@@ -34,6 +34,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Couchbase.Lite.Portable\Couchbase.Lite.Portable.csproj
+		StartupItem = Couchbase.Lite.Tests\Couchbase.Lite.Tests.csproj
 	EndGlobalSection
 EndGlobal
